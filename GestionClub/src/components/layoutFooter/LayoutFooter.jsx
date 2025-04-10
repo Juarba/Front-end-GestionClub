@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 const LayoutFooter = () => {
   return (
-    <div>LayoutFooter</div>
-  )
-}
+    <footer>
+      Footer
+    </footer>
+  );
+};
 
-export default LayoutFooter
+export default LayoutFooter;
