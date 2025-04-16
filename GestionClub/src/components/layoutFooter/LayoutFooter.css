@@ -1,0 +1,20 @@
+.footer {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .footer ul li {
+    color: #ccc;
+    cursor: pointer;
+    margin-bottom: 5px;
+    transition: color 0.3s;
+  }
+  
+  .footer ul li:hover {
+    color: #28a745;
+  }
+  
+  .hover-icon:hover {
+    color: #28a745;
+    transition: color 0.3s ease;
+  }
+  
