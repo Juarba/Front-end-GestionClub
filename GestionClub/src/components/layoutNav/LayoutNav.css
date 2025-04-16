@@ -1,0 +1,10 @@
+.nav-link-hover-green {
+    color: white;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-link-hover-green:hover,
+  .nav-link-hover-green:focus,
+  .nav-link-hover-green.active {
+    color: #28a745 !important; /* Verde Bootstrap */
+  }
