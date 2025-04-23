@@ -1,0 +1,21 @@
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem 3rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card .icon {
+    width: 80px;
+    margin-bottom: 1rem;
+}
+
+.btn-acceder {
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    cursor: pointer;
+}
