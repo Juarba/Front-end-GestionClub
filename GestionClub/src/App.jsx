@@ -6,6 +6,7 @@ import LoginPage from './components/loginPage/LoginPage'
 import RegisterPage from './components/registerPage/RegisterPage'
 import AboutUs from './components/aboutUs/AboutUs'
 import BookingPage from './components/bookingPage/BookingPage'
+import BookingOrder from './components/bookingOrder/BookingOrder'
 
 function App() {
   const router = createBrowserRouter([
@@ -46,6 +47,14 @@ function App() {
       element: (
         <Layout>
           <BookingPage/>
+        </Layout>
+      )
+    },
+    {
+      path: "/bookingOrder",
+      element: (
+        <Layout>
+          <BookingOrder/>
         </Layout>
       )
     },
