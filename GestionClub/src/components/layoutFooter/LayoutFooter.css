@@ -1,6 +1,10 @@
 .footer {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
   
   .footer ul li {
     color: #ccc;

@@ -3,8 +3,8 @@ import { FaMapMarkerAlt, FaEnvelope, FaPhone, FaFacebookF, FaTwitter, FaInstagra
 import './LayoutFooter.css'
 const Footer = () => {
   return (
-    <footer className="footer text-white py-5 fixed-bottom">
-      <Container>
+    <footer className="footer text-white py-5 w-100">
+      <Container fluid>
         <Row>
           {/* Logo e info */}
           <Col md={4}>
