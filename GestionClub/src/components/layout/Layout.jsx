@@ -4,10 +4,12 @@ import LayoutFooter from '../layoutFooter/LayoutFooter'
 
 const Layout = ({ children }) => {
   return (
-    <div>
-        <LayoutNav/>
+    <div className="d-flex flex-column min-vh-100">
+      <LayoutNav />
+      <div className="flex-grow-1">
         {children}
-        <LayoutFooter/>
+      </div>
+      <LayoutFooter />
     </div>
   )
 }
