@@ -27,6 +27,10 @@ const LoginPage = () => {
     }
   };
 
+  const navigateToRegister = () => {
+    navigate('/register');
+  };
+
   return (
     <div className="login-container">
       <div className="login-form-container">
@@ -36,7 +40,7 @@ const LoginPage = () => {
 
         <div className="login-toggle">
           <Button variant="dark" className="login-toggle-button">Iniciar Sesión</Button>
-          <Button variant="success" className="login-toggle-button text-white">Registrarme</Button>
+          <Button variant="success" onClick={navigateToRegister} className="login-toggle-button text-white">Registrarme</Button>
         </div>
 
         <Form onSubmit={handleSubmit}>
@@ -77,7 +81,7 @@ const LoginPage = () => {
         )}
 
         <div className="register-prompt">
-          <small>¿No tienes una cuenta? <a href="#">Regístrate</a></small>
+          <small>¿No tienes una cuenta? <a href="#" onClick={navigateToRegister}>Regístrate</a></small>
         </div>
       </div>
     </div>
