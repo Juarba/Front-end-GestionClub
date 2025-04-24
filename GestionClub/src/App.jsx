@@ -1,12 +1,14 @@
-import './App.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Layout from './components/layout/Layout'
-import MainPage from './components/mainPage/MainPage'
-import LoginPage from './components/loginPage/LoginPage'
-import RegisterPage from './components/registerPage/RegisterPage'
-import AboutUs from './components/aboutUs/AboutUs'
-import BookingPage from './components/bookingPage/BookingPage'
-import BookingOrder from './components/bookingOrder/BookingOrder'
+// src/App.jsx
+import './App.css';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import NoAccess from './routes/NoAccess';
+import PrivateRoute from './routes/PrivateRoute';
+import Layout from './components/layout/Layout';
+import MainPage from './components/mainPage/MainPage';
+import LoginPage from './components/loginPage/LoginPage';
+import RegisterPage from './components/registerPage/RegisterPage';
+import AboutUs from './components/aboutUs/AboutUs';
+import BookingPage from './components/bookingPage/BookingPage';
 
 function App() {
   const router = createBrowserRouter([
@@ -14,7 +16,7 @@ function App() {
       path: "/",
       element: (
         <Layout>
-          <MainPage/>
+          <MainPage />
         </Layout>
       )
     },
@@ -22,7 +24,7 @@ function App() {
       path: "/login",
       element: (
         <Layout>
-          <LoginPage/>
+          <LoginPage />
         </Layout>
       )
     },
@@ -30,37 +32,41 @@ function App() {
       path: "/register",
       element: (
         <Layout>
-          <RegisterPage/>
+          <RegisterPage />
         </Layout>
       )
     },
     {
       path: "/aboutUs",
       element: (
-        <Layout>
-          <AboutUs/>
-        </Layout>
+        <PrivateRoute>
+          <Layout>
+            <AboutUs />
+          </Layout>
+        </PrivateRoute>
       )
     },
     {
       path: "/booking",
       element: (
-        <Layout>
-          <BookingPage/>
-        </Layout>
+        <PrivateRoute>
+          <Layout>
+            <BookingPage />
+          </Layout>
+        </PrivateRoute>
       )
     },
     {
-      path: "/bookingOrder",
+      path: "/no-access",
       element: (
         <Layout>
-          <BookingOrder/>
+          <NoAccess />
         </Layout>
       )
     },
-  ])
+  ]);
 
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;

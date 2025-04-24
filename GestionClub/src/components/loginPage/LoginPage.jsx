@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './LoginPage.css';
+import { useAuth } from '../../context/AuthContext';
+import { authenticateUser } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const LoginPage = () => {
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { token } = await authenticateUser(email, password);
+      login(token);
+      setMessage('Inicio de sesión exitoso');
+      navigate('/', { state: { loginSuccess: true } });
+    } catch (error) {
+      setMessage('Usuario o contraseña incorrectos');
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-form-container">
@@ -16,15 +39,27 @@ const LoginPage = () => {
           <Button variant="success" className="login-toggle-button text-white">Registrarme</Button>
         </div>
 
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Correo electrónico</Form.Label>
-            <Form.Control type="email" placeholder="Ingresa tu correo" />
+            <Form.Control 
+              type="email" 
+              placeholder="Ingresa tu correo" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required 
+            />
           </Form.Group>
 
           <Form.Group className="mb-2" controlId="formBasicPassword">
             <Form.Label>Contraseña</Form.Label>
-            <Form.Control type="password" placeholder="Contraseña" />
+            <Form.Control 
+              type="password" 
+              placeholder="Contraseña" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required 
+            />
             <div className="forgot-password">
               <a href="#">¿Olvidó contraseña?</a>
             </div>
@@ -34,6 +69,12 @@ const LoginPage = () => {
             Iniciar Sesión
           </Button>
         </Form>
+
+        {message && (
+          <div className={`mt-3 ${message.includes('exitoso') ? 'text-success' : 'text-danger'}`}>
+            {message}
+          </div>
+        )}
 
         <div className="register-prompt">
           <small>¿No tienes una cuenta? <a href="#">Regístrate</a></small>

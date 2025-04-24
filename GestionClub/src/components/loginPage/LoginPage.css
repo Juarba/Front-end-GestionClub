@@ -1,53 +1,53 @@
 .login-container {
-    min-height: 100vh;
-    background-image: url("/background.jpg");
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .login-form-container {
-    background: rgba(255, 255, 255, 0.9);
-    width: 100%;
-    max-width: 400px;
-    padding: 1.5rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  }
-  
-  .logo-container {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .logo-image {
-    height: 60px;
-  }
-  
-  .login-toggle {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    border-radius: 50px;
-    overflow: hidden;
-    border: 1px solid #dee2e6;
-    background-color: #e9ecef;
-  }
-  
-  .login-toggle-button {
-    border-radius: 0;
-    width: 50%;
-  }
-  
-  .forgot-password {
-    text-align: right;
-    margin-top: 0.25rem;
-    font-size: 0.9rem;
-  }
-  
-  .register-prompt {
-    text-align: center;
-    margin-top: 1rem;
-  }
+  min-height: 100vh;
+  background-image: url("/public/images/background1.jpg");
+  background-size: cover;
+  background-position: center;  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form-container {
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  max-width: 400px;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.logo-image {
+  height: 60px;
+}
+
+.login-toggle {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid #dee2e6;
+  background-color: #e9ecef;
+}
+
+.login-toggle-button {
+  border-radius: 0;
+  width: 50%;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.register-prompt {
+  text-align: center;
+  margin-top: 1rem;
+}

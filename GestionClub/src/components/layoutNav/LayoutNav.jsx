@@ -2,9 +2,12 @@ import React from "react";
 import { Navbar, Nav, Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import './LayoutNav.css';
+import { useAuth } from '../../context/AuthContext';
+
 
 const LayoutNav = () => {
   const navigate = useNavigate();
+  const { isLoggedIn, logout } = useAuth();
 
   const handleMainPage = () => {
     navigate("/");
@@ -21,6 +24,12 @@ const LayoutNav = () => {
   const handleLogin = () => {
     navigate("/login");
   };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+  
   return (
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
     <Container>
@@ -35,7 +44,16 @@ const LayoutNav = () => {
           <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>
         </Nav>
         <Nav className="me-auto">
-        <Nav.Link onClick={handleLogin}  className="rounded-pill nav-link-hover-green">Inicia Sesion</Nav.Link>
+        {isLoggedIn ? (
+        <Button onClick={handleLogout} className="btn-navbar-logout">
+        Cerrar sesión
+      </Button>
+      
+      ) : (
+        <Nav.Link onClick={handleLogin} className="rounded-pill nav-link-hover-green">
+          Inicia Sesión
+        </Nav.Link>
+      )}
         <Button onClick={handleBookingPage} variant="success" className="rounded-pill nav-link-hover-white">RESERVAR CANCHA</Button>
         </Nav>
       </Navbar.Collapse>
