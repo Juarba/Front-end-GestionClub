@@ -26,6 +26,10 @@ const RegisterPage = () => {
     setCurrentStep(prev => prev + 1);
   };
 
+  const backStep = () => {
+    setCurrentStep(prev => prev - 1);
+  };
+
   const renderStep = () => {
     switch (currentStep) {
       case 1: 
@@ -42,6 +46,7 @@ const RegisterPage = () => {
             formData={formData}
             setFormData={setFormData}
             onNext={nextStep}
+            onBack={backStep}
           />
         )
       case 3:
@@ -50,6 +55,7 @@ const RegisterPage = () => {
             formData={formData}
             setFormData={setFormData}
             onNext={nextStep}
+            onBack={backStep}
           />
         )
       case 4:

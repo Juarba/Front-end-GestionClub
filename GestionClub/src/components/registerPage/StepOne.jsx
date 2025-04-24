@@ -38,8 +38,13 @@ const StepOne = ({ formData, setFormData, onNext }) => {
 
     return (
         <div className="step-one-container">
-            <div className="form-box p-4 rounded shadow-sm bg-white">
+            <div className="step-one-form-container">
                 <h2 className="mb-4 text-center">Crear cuenta</h2>
+
+                <div className="register-toggle">
+                    <Button variant="success" onClick={handleToLogin} className="register-toggle-button text-white">Iniciar Sesión</Button>
+                    <Button variant="dark"  className="register-toggle-button">Registrarme</Button>
+                </div>
 
                 <Form.Group className="mb-3">
                     <Form.Control
@@ -87,8 +92,7 @@ const StepOne = ({ formData, setFormData, onNext }) => {
 
                 <div className="login-prompt">
                     <small>
-                        ¿Ya tienes una cuenta? 
-                        <Link to="/login" className="btn btn-link p-0 align-baseline">Inciar sesion</Link>
+                        ¿Ya tienes una cuenta? <a href="#" onClick={handleToLogin}>Iniciar sesion</a>
                     </small>
                 </div>
             </div>

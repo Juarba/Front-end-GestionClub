@@ -1,10 +1,34 @@
 .step-one-container {
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-one-form-container {
     background: rgba(255, 255, 255, 0.9);
     width: 100%;
     max-width: 400px;
     padding: 1.5rem;
     border-radius: 0.75rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.register-toggle {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+    background-color: #e9ecef;
+}
+
+.register-toggle-button {
+    border-radius: 0;
+    width: 50%;
 }
 
 .login-prompt {

@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Button } from "react-bootstrap";
 import "./registerCss/StepThree.css";
 
-const StepThree = ({ formData, setFormData, onNext }) => {
+const StepThree = ({ formData, setFormData, onNext, onBack }) => {
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -27,9 +27,13 @@ const StepThree = ({ formData, setFormData, onNext }) => {
         onNext();
     };
 
+    const handleBack = () => {
+        onBack();
+    };
+
     return (
-        <div className="step-three-container d-flex justify-content-center">
-            <div className="form-box p-4 rounded shadow-sm bg-white" style={{ maxWidth: "600px", width: "100%" }}>
+        <div className="step-three-container">
+            <div className="step-three-form-container">
                 <h2 className="mb-4 text-center">Datos personales</h2>
 
                 <Form.Group className="mb-3">
@@ -104,9 +108,16 @@ const StepThree = ({ formData, setFormData, onNext }) => {
                     />
                 </Form.Group>
 
+                
+                <div className="d-flex justify-content-between gap-2">
+                <Button variant="outline-secondary" className="button-back-custom" onClick={handleBack}>
+                    ←
+                </Button>
+
                 <Button variant="primary" className="w-100" onClick={handleNext}>
                     Guardar
                 </Button>
+                </div>
             </div>
         </div>
     );
