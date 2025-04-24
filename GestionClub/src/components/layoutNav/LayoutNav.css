@@ -1,10 +1,30 @@
 .nav-link-hover-green {
-    color: white;
-    transition: color 0.3s ease;
-  }
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.nav-link-hover-green:hover,
+.nav-link-hover-green:focus,
+.nav-link-hover-green.active {
+  color: #28a745 !important; /* Verde Bootstrap */
+}
+
+.nav-link-hover-green.text-danger:hover {
+  color: #dc3545 !important;
+}
+.btn-navbar-logout {
+  background-color: #dc3545;       /* rojo Bootstrap */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-navbar-logout:hover {
+  background-color: #c82333;
+  color: white;
+}
   
-  .nav-link-hover-green:hover,
-  .nav-link-hover-green:focus,
-  .nav-link-hover-green.active {
-    color: #28a745 !important; /* Verde Bootstrap */
-  }

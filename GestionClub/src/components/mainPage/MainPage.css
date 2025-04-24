@@ -1,0 +1,84 @@
+.mainpage-background {
+  min-height: 100vh;
+  background-image: url("/public/images/background.jpg");
+  background-size: cover;
+  background-position: center;
+  padding-top: 100px; /* espacio superior constante */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+}
+
+.mainpage-message-wrapper {
+  height: 40px; /* altura reservada constante */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mainpage-success-message {
+  background-color: rgba(40, 167, 69, 0.95);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mainpage-content {
+  margin-top: 20px;
+  backdrop-filter: blur(3px);
+}
+
+.mainpage-content h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.mainpage-content p {
+  font-size: 1.25rem;
+
+.logout-button {
+background-color: #dc3545;
+color: white;
+border: none;
+padding: 10px 16px;
+margin-top: 20px;
+border-radius: 6px;
+font-weight: bold;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+background-color: #c82333;
+}
+
+}
+
+.logout-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  margin-top: 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}
+
