@@ -1,0 +1,31 @@
+
+.booking-title {
+    text-align: left;
+    margin-bottom: 3rem;
+    font-weight: 600;
+}
+.booking-container {
+    background-color: rgb(220, 248, 220);
+    min-height: 100vh;
+    padding: 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.info-col .card-title {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.info-box {
+    background-color: #0f172a;
+    color: white;
+}
+
+.booking-table th,
+.booking-table td {
+    vertical-align: middle;
+    font-size: 1rem;
+    padding: 0.75rem;
+}

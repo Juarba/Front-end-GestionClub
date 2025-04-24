@@ -1,0 +1,33 @@
+.order-container {
+    background-color: rgb(220, 248, 220);
+    min-height: 100vh;
+    padding: 5rem;
+    max-width: fit-content;
+    margin: 0 auto ;
+}
+
+.order-title {
+    text-align: left;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.order-card {
+    border-radius: 20px;
+}
+
+.order-icon {
+    font-size: 3rem;
+    margin-right: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.order-icon .icon {
+    margin-bottom: 0.25rem;
+}
+
+.order-icon .ball {
+    font-size: 5.5rem;
+}
