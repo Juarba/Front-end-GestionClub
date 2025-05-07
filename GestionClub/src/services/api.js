@@ -1,13 +1,13 @@
 const API_URL = "https://localhost:7234/api"; // <-- PONER EL PUERTO DE CADA UNO DEL BACK
 
-export const authenticateUser = async (username, password) => {
+export const authenticateUser = async (email, password) => {
   try {
     const response = await fetch(`${API_URL}/Authentication/Authenticate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ UserName: username, Password: password }),
+      body: JSON.stringify({ Email: email, Password: password }),
     });
 
     if (!response.ok) {
