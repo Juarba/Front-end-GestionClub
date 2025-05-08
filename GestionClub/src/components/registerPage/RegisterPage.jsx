@@ -1,22 +1,13 @@
 import { useState } from 'react';
 import StepOne from './StepOne';
-import StepTwo from './StepTwo';
-import StepThree from './StepThree';
 import StepConfirm from './StepConfirm';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
-    dni: '',
+    name: '',
     email: '',
     password: '',
     repeatPassword: '',
-    userName: '',
-    name: '',
-    lastName: '',
-    birthdate: '',
-    locality: '',
-    nationality: '',
-    gender: '',
     phoneNumber: '',
   });
 
@@ -26,9 +17,6 @@ const RegisterPage = () => {
     setCurrentStep(prev => prev + 1);
   };
 
-  const backStep = () => {
-    setCurrentStep(prev => prev - 1);
-  };
 
   const renderStep = () => {
     switch (currentStep) {
@@ -41,24 +29,6 @@ const RegisterPage = () => {
           />
         );
       case 2:
-        return (
-          <StepTwo
-            formData={formData}
-            setFormData={setFormData}
-            onNext={nextStep}
-            onBack={backStep}
-          />
-        )
-      case 3:
-        return (
-          <StepThree
-            formData={formData}
-            setFormData={setFormData}
-            onNext={nextStep}
-            onBack={backStep}
-          />
-        )
-      case 4:
         return (
           <StepConfirm
             formData={formData}

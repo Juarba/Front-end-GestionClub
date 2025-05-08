@@ -13,12 +13,13 @@ const StepOne = ({ formData, setFormData, onNext }) => {
         });
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (
-            !formData.dni ||
+            !formData.name ||
             !formData.email ||
             !formData.password ||
-            !formData.repeatPassword
+            !formData.repeatPassword ||
+            !formData.phoneNumber
         ) {
             alert("Por favor completa todos los campos");
             return;
@@ -29,7 +30,32 @@ const StepOne = ({ formData, setFormData, onNext }) => {
             return;
         }
 
-        onNext();
+        try {
+            const response = await fetch("https://localhost:7234/api/User/CreateUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    Name: formData.name,
+                    Email: formData.email,
+                    Password: formData.password,
+                    PhoneNumber: formData.phoneNumber,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message}`);
+                return;
+            }
+
+            onNext();
+        } catch (error) {
+            console.error("Error al registrar usuario:", error);
+            alert("Ocurrió un error al intentar registrar al usuario.");
+        }
+
     };
 
     const handleToLogin = () => {
@@ -43,15 +69,15 @@ const StepOne = ({ formData, setFormData, onNext }) => {
 
                 <div className="register-toggle">
                     <Button variant="success" onClick={handleToLogin} className="register-toggle-button text-white">Iniciar Sesión</Button>
-                    <Button variant="dark"  className="register-toggle-button">Registrarme</Button>
+                    <Button variant="dark" className="register-toggle-button">Registrarme</Button>
                 </div>
 
                 <Form.Group className="mb-3">
                     <Form.Control
                         type="text"
-                        name="dni"
-                        placeholder="N° de documento"
-                        value={formData.dni}
+                        name="name"
+                        placeholder="Nombre"
+                        value={formData.name}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -82,6 +108,16 @@ const StepOne = ({ formData, setFormData, onNext }) => {
                         name="repeatPassword"
                         placeholder="Repetir contraseña"
                         value={formData.repeatPassword}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-4">
+                    <Form.Control
+                        type="text"
+                        name="phoneNumber"
+                        placeholder="N° de teléfono"
+                        value={formData.phoneNumber}
                         onChange={handleChange}
                     />
                 </Form.Group>

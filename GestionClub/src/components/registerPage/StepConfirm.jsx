@@ -7,7 +7,7 @@ const StepConfirm = () => {
     const navigate = useNavigate();
 
     const handleAccess = () => {
-        navigate("/");
+        navigate("/login");
     };
 
     return (
