@@ -9,6 +9,7 @@ import LoginPage from './components/loginPage/LoginPage';
 import RegisterPage from './components/registerPage/RegisterPage';
 import AboutUs from './components/aboutUs/AboutUs';
 import BookingPage from './components/bookingPage/BookingPage';
+import UserCenterPage from './components/userCenter/UserCenterPage';
 
 function App() {
   const router = createBrowserRouter([
@@ -52,6 +53,16 @@ function App() {
         <PrivateRoute>
           <Layout>
             <BookingPage />
+          </Layout>
+        </PrivateRoute>
+      )
+    },
+    {
+      path: "/userCenter",
+      element: (
+        <PrivateRoute>
+          <Layout>
+            <UserCenterPage />
           </Layout>
         </PrivateRoute>
       )
