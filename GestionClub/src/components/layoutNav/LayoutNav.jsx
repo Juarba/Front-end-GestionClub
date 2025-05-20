@@ -3,6 +3,7 @@ import { Navbar, Nav, Button, Container, Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import './LayoutNav.css';
 import { useAuth } from '../../context/AuthContext';
+import { jwtDecode } from "jwt-decode";
 
 
 const LayoutNav = () => {
@@ -34,6 +35,20 @@ const LayoutNav = () => {
     navigate('/login');
   };
 
+  //Extrae el rol desde el token
+  let userRole = null;
+  const token = localStorage.getItem("jwtToken");
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? null; 
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+  }
+
+  const showMenu = userRole === "Admin" || userRole === "Gerente";
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
       <Container>
@@ -47,18 +62,20 @@ const LayoutNav = () => {
             <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">ACTIVIDADES</Nav.Link>
             <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>
           </Nav>
-          <Nav className="ms-auto">
-            <Dropdown align="end">
-              <Dropdown.Toggle variant="success" className="rounded-circle">
-                ☰
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={handleUserCenter}>
-                  Centro de Usuario
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Nav>
+          {showMenu && (
+            <Nav className="ms-auto">
+              <Dropdown align="end">
+                <Dropdown.Toggle variant="success" className="rounded-circle">
+                  ☰
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={handleUserCenter}>
+                    Centro de Usuario
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Nav>
+          )}
           <Nav className="me-auto">
             {isLoggedIn ? (
               <Button onClick={handleLogout} className="btn-navbar-logout">
