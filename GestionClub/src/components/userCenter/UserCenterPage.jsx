@@ -25,6 +25,8 @@ const UserCenterPage = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
 
@@ -61,6 +63,11 @@ const UserCenterPage = () => {
     setShowModal(true);
   };
 
+  const handleDelete = (user) => {
+    setSelectedUser(user)
+    setShowConfirmModal(true);
+  }
+
   //Función para actualizar los datos del usuario
   const handleSave = async () => {
     if (!selectedUser) return;
@@ -73,6 +80,7 @@ const UserCenterPage = () => {
         Email: selectedUser.email,
         PhoneNumber: selectedUser.phoneNumber,
         Rol: parseInt(selectedUser.rol),
+        State: selectedUser.state,
       };
 
 
@@ -110,12 +118,14 @@ const UserCenterPage = () => {
   };
 
   //Función para "eliminar" (actualizar estado) un usuario
-  const handleDelete = async (userId) => {
+  const handleRemoveUser = async () => {
+    if (!selectedUser) return;
+
     const token = localStorage.getItem("jwtToken");
 
     try {
-      const response = await fetch(`https://localhost:7234/api/User/UpdateUserState/${userId}`, {
-        method: "PUT",
+      const response = await fetch(`https://localhost:7234/api/User/DeleteUser/${selectedUser.id}`, {
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -125,18 +135,21 @@ const UserCenterPage = () => {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const updatedUsers = users.map((user) =>
-        user.id === userId ? { ...user, state: false } : user
-      );
-
+      // Actualizar la lista de usuarios sin el eliminado
+      const updatedUsers = users.filter((user) => user.id !== selectedUser.id);
       setUsers(updatedUsers);
 
       setToastMessage("Usuario eliminado con éxito.");
       setShowToast(true);
     } catch (error) {
       console.error("Error deleting user:", error);
+      setToastMessage("Hubo un error al eliminar el usuario.");
+      setShowToast(true);
+    } finally {
+      setShowConfirmModal(false);
+      setSelectedUser(null);
     }
-  };
+  }
 
   if (loading) {
     return (
@@ -175,7 +188,7 @@ const UserCenterPage = () => {
                   <Button variant="warning" className="me-2" onClick={() => handleEdit(user)}>
                     Editar
                   </Button>
-                  <Button variant="danger" onClick={() => handleDelete(user.id)}>Eliminar</Button>
+                  <Button variant="danger" onClick={() => handleDelete(user)}>Eliminar</Button>
                 </td>
               </tr>
             ))
@@ -238,6 +251,18 @@ const UserCenterPage = () => {
                 <option value="1">Cliente</option>
               </Form.Select>
             </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Check
+                type="switch"
+                id="estado-switch"
+                label="Activo"
+                name="state"
+                checked={selectedUser?.state || false}
+                onChange={(e) =>
+                  setSelectedUser({ ...selectedUser, state: e.target.checked })
+                }
+              />
+            </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -249,6 +274,26 @@ const UserCenterPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar Eliminación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          ¿Estás seguro que deseas eliminar el usuario <strong>{selectedUser?.name}</strong>?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleRemoveUser}>
+            Sí, eliminar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+
 
       {/* ✅ Toast de Notificación */}
       <ToastContainer position="top-end" className="p-3">
