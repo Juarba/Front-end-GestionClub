@@ -4,7 +4,8 @@ import "./UserCenterPage.css";
 
 // Función para convertir el rol numérico a texto
 const getRoleName = (role) => {
-  switch (role) {
+  const numericRole = parseInt(role);
+  switch (numericRole) {
     case 0:
       return "Admin";
     case 1:
@@ -70,7 +71,6 @@ const UserCenterPage = () => {
       const payload = {
         Name: selectedUser.name,
         Email: selectedUser.email,
-        Password: selectedUser.password,
         PhoneNumber: selectedUser.phoneNumber,
         Rol: parseInt(selectedUser.rol),
       };
@@ -148,6 +148,7 @@ const UserCenterPage = () => {
 
   return (
     <Container className="mt-5 container">
+      <br />
       <h3 className="mb-4">Usuarios Registrados</h3>
 
       <Table striped bordered hover>
@@ -211,16 +212,6 @@ const UserCenterPage = () => {
                 type="email"
                 name="email"
                 value={selectedUser?.email || ""}
-                onChange={handleChange}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Contraseña</Form.Label>
-              <Form.Control
-                type="text"
-                name="password"
-                value={selectedUser?.password || ""}
                 onChange={handleChange}
               />
             </Form.Group>
