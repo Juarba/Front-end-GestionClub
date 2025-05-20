@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { useAuth } from '../context/AuthContext';
 
 const PrivateRoute = ({ children }) => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, loading } = useAuth();
+
+  if (loading) return <p>Cargando...</p>; // 👈 Podés reemplazarlo con un spin
 
   return isLoggedIn ? children : <Navigate to="/no-access" />;
 };
