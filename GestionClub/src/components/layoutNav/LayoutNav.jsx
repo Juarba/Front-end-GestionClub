@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import './LayoutNav.css';
 import { useAuth } from '../../context/AuthContext';
 import { jwtDecode } from "jwt-decode";
+import UserDropdown from "../userDropdown/UserDropdown";
 
 
 const LayoutNav = () => {
@@ -41,7 +42,7 @@ const LayoutNav = () => {
   if (token) {
     try {
       const decoded = jwtDecode(token);
-      userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? null; 
+      userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? null;
     } catch (error) {
       console.error("Error decoding token:", error);
     }
@@ -62,35 +63,32 @@ const LayoutNav = () => {
             <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">ACTIVIDADES</Nav.Link>
             <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>
           </Nav>
-          {showMenu && (
-            <Nav className="ms-auto">
-              <Dropdown align="end">
-                <Dropdown.Toggle variant="success" className="rounded-circle">
-                  ☰
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={handleUserCenter}>
-                    Centro de Usuario
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Nav>
-          )}
           <Nav className="me-auto">
-            {isLoggedIn ? (
-              <Button onClick={handleLogout} className="btn-navbar-logout">
-                Cerrar sesión
-              </Button>
-
-            ) : (
-              <Nav.Link onClick={handleLogin} className="rounded-pill nav-link-hover-green">
-                Inicia Sesión
-              </Nav.Link>
-            )}
             <Button onClick={handleBookingPage} variant="success" className="rounded-pill nav-link-hover-white">RESERVAR CANCHA</Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
+      {showMenu && (
+        <Nav className="ms-auto me-2">
+          <Dropdown align="end">
+            <Dropdown.Toggle variant="dark">
+              <i class="bi bi-list" style={{ fontSize: "1.3rem" }}></i>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={handleUserCenter}>
+                Centro de Usuario
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Nav>
+      )}
+      {isLoggedIn ? (
+        <UserDropdown logout={logout} className="user-dropdown" />
+      ) : (
+        <Nav.Link onClick={handleLogin} className="rounded-pill nav-link-hover-green me-3">
+          Inicia Sesión
+        </Nav.Link>
+      )}
     </Navbar>
   );
 };
