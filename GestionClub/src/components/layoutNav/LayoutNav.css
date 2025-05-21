@@ -6,7 +6,7 @@
 .nav-link-hover-green:hover,
 .nav-link-hover-green:focus,
 .nav-link-hover-green.active {
-  color: #28a745 !important; /* Verde Bootstrap */
+  color: #28a745 !important; 
 }
 
 .nav-link-hover-green.text-danger:hover {
@@ -27,4 +27,11 @@
   background-color: #c82333;
   color: white;
 }
+
+.user-dropdown {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 0;
+}
+
   
