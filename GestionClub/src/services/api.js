@@ -1,4 +1,5 @@
-const API_URL = "https://localhost:7234/api"; // <-- PONER EL PUERTO DE CADA UNO DEL BACK
+// src/services/api.js
+export const API_URL = "https://localhost:7234/api";
 
 export const authenticateUser = async (email, password) => {
   try {

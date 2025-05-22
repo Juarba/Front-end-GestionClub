@@ -36,6 +36,10 @@ const LayoutNav = () => {
     navigate('/login');
   };
 
+  const handleNews = () => {
+    navigate("/news");
+  }
+
   //Extrae el rol desde el token
   let userRole = null;
   const token = localStorage.getItem("jwtToken");
@@ -58,7 +62,7 @@ const LayoutNav = () => {
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto">
             <Nav.Link onClick={handleMainPage} className="nav-link-hover-green fw-bold text-success">INICIO</Nav.Link>
-            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CLUB</Nav.Link>
+            <Nav.Link onClick={handleNews} className="nav-link-hover-green">CLUB</Nav.Link>
             <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">SERVICIOS</Nav.Link>
             <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">ACTIVIDADES</Nav.Link>
             <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>

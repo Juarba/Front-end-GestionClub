@@ -10,6 +10,8 @@ import RegisterPage from './components/registerPage/RegisterPage';
 import AboutUs from './components/aboutUs/AboutUs';
 import BookingPage from './components/bookingPage/BookingPage';
 import UserCenterPage from './components/userCenter/UserCenterPage';
+import NewsList from './components/news/NewsList';
+import NewsDashboard from './components/news/NewsDashboard';
 
 function App() {
   const router = createBrowserRouter([
@@ -65,6 +67,14 @@ function App() {
             <UserCenterPage />
           </Layout>
         </PrivateRoute>
+      )
+    },
+     {
+      path: "/news",
+      element: (
+         <Layout>
+          <NewsDashboard />
+        </Layout>
       )
     },
     {
