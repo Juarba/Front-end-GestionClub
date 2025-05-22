@@ -23,6 +23,14 @@ const LayoutNav = () => {
     navigate("/aboutUs");
   };
 
+  const handleClubPage = () => {
+    navigate("/clubPage");
+  };
+
+  const handleServicePage = () => {
+    navigate("/servicePage");
+  };
+
   const handleUserCenter = () => {
     navigate("/userCenter")
   }
@@ -58,8 +66,8 @@ const LayoutNav = () => {
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto">
             <Nav.Link onClick={handleMainPage} className="nav-link-hover-green fw-bold text-success">INICIO</Nav.Link>
-            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CLUB</Nav.Link>
-            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">SERVICIOS</Nav.Link>
+            <Nav.Link onClick={handleClubPage} className="nav-link-hover-green">CLUB</Nav.Link>
+            <Nav.Link onClick={handleServicePage} className="nav-link-hover-green">SERVICIOS</Nav.Link>
             <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">ACTIVIDADES</Nav.Link>
             <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>
           </Nav>
