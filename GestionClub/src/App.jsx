@@ -8,7 +8,6 @@ import MainPage from './components/mainPage/MainPage';
 import LoginPage from './components/loginPage/LoginPage';
 import RegisterPage from './components/registerPage/RegisterPage';
 import AboutUs from './components/aboutUs/AboutUs';
-import ClubPage from './components/clubPage/clubPage';
 import ServicePage from './components/servicePage/servicePage';
 import BookingPage from './components/bookingPage/BookingPage';
 import UserCenterPage from './components/userCenter/UserCenterPage';
@@ -52,16 +51,6 @@ function App() {
       )
     },
     {
-      path: "/clubPage",
-      element: (
-        <PrivateRoute>
-          <Layout>
-            <ClubPage />
-          </Layout>
-        </PrivateRoute>
-      )
-    },
-    {
       path: "/servicePage",
       element: (
         <PrivateRoute>
@@ -91,10 +80,10 @@ function App() {
         </PrivateRoute>
       )
     },
-     {
+    {
       path: "/news",
       element: (
-         <Layout>
+        <Layout>
           <NewsDashboard />
         </Layout>
       )
