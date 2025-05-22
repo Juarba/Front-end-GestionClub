@@ -12,6 +12,8 @@ import ClubPage from './components/clubPage/clubPage';
 import ServicePage from './components/servicePage/servicePage';
 import BookingPage from './components/bookingPage/BookingPage';
 import UserCenterPage from './components/userCenter/UserCenterPage';
+import NewsList from './components/news/NewsList';
+import NewsDashboard from './components/news/NewsDashboard';
 
 function App() {
   const router = createBrowserRouter([
@@ -87,6 +89,14 @@ function App() {
             <UserCenterPage />
           </Layout>
         </PrivateRoute>
+      )
+    },
+     {
+      path: "/news",
+      element: (
+         <Layout>
+          <NewsDashboard />
+        </Layout>
       )
     },
     {
