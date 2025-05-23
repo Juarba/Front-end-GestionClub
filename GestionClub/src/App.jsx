@@ -8,8 +8,12 @@ import MainPage from './components/mainPage/MainPage';
 import LoginPage from './components/loginPage/LoginPage';
 import RegisterPage from './components/registerPage/RegisterPage';
 import AboutUs from './components/aboutUs/AboutUs';
+import ServicePage from './components/servicePage/servicePage';
 import BookingPage from './components/bookingPage/BookingPage';
 import UserCenterPage from './components/userCenter/UserCenterPage';
+import NewsList from './components/news/NewsList';
+import NewsDashboard from './components/news/NewsDashboard';
+import NotFound from './components/notFound/NotFound';
 import ResetPassword from './components/resetPassword/ResetPassword';
 import RestorePassword from './components/restorePassword/RestorePassword';
 
@@ -66,6 +70,16 @@ function App() {
       )
     },
     {
+      path: "/servicePage",
+      element: (
+        <PrivateRoute>
+          <Layout>
+            <ServicePage />
+          </Layout>
+        </PrivateRoute>
+      )
+    },
+    {
       path: "/booking",
       element: (
         <PrivateRoute>
@@ -86,6 +100,14 @@ function App() {
       )
     },
     {
+      path: "/news",
+      element: (
+        <Layout>
+          <NewsDashboard />
+        </Layout>
+      )
+    },
+    {
       path: "/no-access",
       element: (
         <Layout>
@@ -93,6 +115,14 @@ function App() {
         </Layout>
       )
     },
+    {
+      path: "*", 
+      element: (
+        <Layout>
+          <NotFound />
+        </Layout>
+      )
+    }
   ]);
 
   return <RouterProvider router={router} />;
