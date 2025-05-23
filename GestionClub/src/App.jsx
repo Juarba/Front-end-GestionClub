@@ -13,6 +13,7 @@ import BookingPage from './components/bookingPage/BookingPage';
 import UserCenterPage from './components/userCenter/UserCenterPage';
 import NewsList from './components/news/NewsList';
 import NewsDashboard from './components/news/NewsDashboard';
+import NotFound from './components/notFound/NotFound';
 
 function App() {
   const router = createBrowserRouter([
@@ -96,6 +97,14 @@ function App() {
         </Layout>
       )
     },
+    {
+      path: "*", 
+      element: (
+        <Layout>
+          <NotFound />
+        </Layout>
+      )
+    }
   ]);
 
   return <RouterProvider router={router} />;
