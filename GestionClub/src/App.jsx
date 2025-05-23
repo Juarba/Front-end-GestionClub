@@ -10,6 +10,8 @@ import RegisterPage from './components/registerPage/RegisterPage';
 import AboutUs from './components/aboutUs/AboutUs';
 import BookingPage from './components/bookingPage/BookingPage';
 import UserCenterPage from './components/userCenter/UserCenterPage';
+import ResetPassword from './components/resetPassword/ResetPassword';
+import RestorePassword from './components/restorePassword/RestorePassword';
 
 function App() {
   const router = createBrowserRouter([
@@ -34,6 +36,22 @@ function App() {
       element: (
         <Layout>
           <RegisterPage />
+        </Layout>
+      )
+    },
+    {
+      path: "/reset-password",
+      element: (
+        <Layout>
+          <ResetPassword />
+        </Layout>
+      )
+    },
+    {
+      path: "/restore-password",
+      element: (
+        <Layout>
+          <RestorePassword/>
         </Layout>
       )
     },
