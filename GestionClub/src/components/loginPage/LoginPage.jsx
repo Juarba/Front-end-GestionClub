@@ -65,7 +65,7 @@ const LoginPage = () => {
               required 
             />
             <div className="forgot-password">
-              <a href="#">¿Olvidó contraseña?</a>
+              <a href="#" onClick={navigate('reset-password')}>¿Olvidó contraseña?</a>
             </div>
           </Form.Group>
 

@@ -14,6 +14,8 @@ import UserCenterPage from './components/userCenter/UserCenterPage';
 import NewsList from './components/news/NewsList';
 import NewsDashboard from './components/news/NewsDashboard';
 import NotFound from './components/notFound/NotFound';
+import ResetPassword from './components/resetPassword/ResetPassword';
+import RestorePassword from './components/restorePassword/RestorePassword';
 
 function App() {
   const router = createBrowserRouter([
@@ -38,6 +40,22 @@ function App() {
       element: (
         <Layout>
           <RegisterPage />
+        </Layout>
+      )
+    },
+    {
+      path: "/reset-password",
+      element: (
+        <Layout>
+          <ResetPassword />
+        </Layout>
+      )
+    },
+    {
+      path: "/restore-password",
+      element: (
+        <Layout>
+          <RestorePassword/>
         </Layout>
       )
     },
