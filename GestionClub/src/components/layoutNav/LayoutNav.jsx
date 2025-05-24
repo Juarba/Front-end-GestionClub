@@ -5,6 +5,7 @@ import './LayoutNav.css';
 import { useAuth } from '../../context/AuthContext';
 import { jwtDecode } from "jwt-decode";
 import UserDropdown from "../userDropdown/UserDropdown";
+import logo from "../../assets/LogoSinFondo.png"
 
 
 const LayoutNav = () => {
@@ -60,8 +61,9 @@ const LayoutNav = () => {
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+      <img onClick={handleMainPage}  src={logo} alt="Logo" className="mb-3" style={{ width: 100, cursor: 'pointer' }} />
       <Container>
-        <Navbar.Brand onClick={handleMainPage} className="fw-bold">Gestion Club</Navbar.Brand>
+        <Navbar.Brand onClick={handleMainPage} className="fw-bold" style={{ cursor: 'pointer' }}>Gestion Club</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto">
