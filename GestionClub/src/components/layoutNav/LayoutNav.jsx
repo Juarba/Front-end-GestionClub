@@ -44,7 +44,10 @@ const LayoutNav = () => {
   const handleNews = () => {
     navigate("/news");
   }
-
+  //MERCADOPAGO
+ const handlePagoPage = () => {
+    navigate("/pago");
+  };
   //Extrae el rol desde el token
   let userRole = null;
   const token = localStorage.getItem("jwtToken");
@@ -72,6 +75,7 @@ const LayoutNav = () => {
             <Nav.Link onClick={handleNews} className="nav-link-hover-green">CLUB</Nav.Link>
             <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">ACTIVIDADES</Nav.Link>
             <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>
+            <Nav.Link onClick={handlePagoPage} className="nav-link-hover-green">PagoPrueba</Nav.Link>
           </Nav>
           <Nav className="me-auto">
             <Button onClick={handleBookingPage} variant="success" className="rounded-pill nav-link-hover-white">RESERVAR CANCHA</Button>
