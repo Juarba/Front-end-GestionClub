@@ -1,0 +1,26 @@
+.contact-container {
+    background-color: lightgrey;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+.contact-title {
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+.contact-description {
+    margin-bottom: 30px;
+    color: #6c757d;
+}
+
+.contact-form label {
+    font-weight: 500;
+}
+
+.contact-form button {
+    width: 100%;
+    margin-top: 10px;
+}

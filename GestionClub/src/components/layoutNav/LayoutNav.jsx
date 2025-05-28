@@ -5,6 +5,7 @@ import "./LayoutNav.css";
 import { useAuth } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import UserDropdown from "../userDropdown/UserDropdown";
+import logo from "../../assets/LogoSinFondo.png"
 
 const LayoutNav = () => {
   const navigate = useNavigate();
@@ -22,6 +23,10 @@ const LayoutNav = () => {
     navigate("/aboutUs");
   };
 
+  const handleServicePage = () => {
+    navigate("/servicePage");
+  };
+
   const handleUserCenter = () => {
     navigate("/userCenter");
   };
@@ -35,6 +40,13 @@ const LayoutNav = () => {
     navigate("/login");
   };
 
+  const handleNews = () => {
+    navigate("/news");
+  }
+  //MERCADOPAGO
+ const handlePagoPage = () => {
+    navigate("/pago");
+  };
   //Extrae el rol desde el token
   let userRole = null;
   const token = localStorage.getItem("jwtToken");
@@ -53,35 +65,19 @@ const LayoutNav = () => {
   const showMenu = userRole === "Admin" || userRole === "Gerente";
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+    <Navbar bg="dark" variant="dark" expand="lg" >
+      <img onClick={handleMainPage}  src={logo} alt="Logo" style={{ width: 60, cursor: 'pointer' }} />
       <Container>
-        <Navbar.Brand onClick={handleMainPage} className="fw-bold">
-          Gestion Club
-        </Navbar.Brand>
+        <Navbar.Brand onClick={handleMainPage} className="fw-bold" style={{ cursor: 'pointer' }}>Gestion Club</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link
-              onClick={handleMainPage}
-              className="nav-link-hover-green fw-bold text-success"
-            >
-              INICIO
-            </Nav.Link>
-            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">
-              CLUB
-            </Nav.Link>
-            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">
-              SERVICIOS
-            </Nav.Link>
-            <Nav.Link
-              onClick={handleBookingPage}
-              className="nav-link-hover-green"
-            >
-              ACTIVIDADES
-            </Nav.Link>
-            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">
-              CONTACTO
-            </Nav.Link>
+            <Nav.Link onClick={handleMainPage} className="nav-link-hover-green fw-bold text-success">INICIO</Nav.Link>
+            <Nav.Link onClick={handleServicePage} className="nav-link-hover-green">SERVICIOS</Nav.Link>
+            <Nav.Link onClick={handleNews} className="nav-link-hover-green">CLUB</Nav.Link>
+            <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">ACTIVIDADES</Nav.Link>
+            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>
+            <Nav.Link onClick={handlePagoPage} className="nav-link-hover-green">PagoPrueba</Nav.Link>
           </Nav>
           <Nav className="me-auto">
             <Button

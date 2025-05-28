@@ -31,6 +31,10 @@ const LoginPage = () => {
     navigate('/register');
   };
 
+  const navigatetoResetPassword = () => {
+    navigate('/reset-password');
+  }
+
   return (
     <div className="login-container">
       <div className="login-form-container">
@@ -65,7 +69,7 @@ const LoginPage = () => {
               required 
             />
             <div className="forgot-password">
-              <a href="#">¿Olvidó contraseña?</a>
+              <a href="#" onClick={navigatetoResetPassword}>¿Olvidó contraseña?</a>
             </div>
           </Form.Group>
 
