@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Container, Table, Button, Spinner, Modal, Form, Toast, ToastContainer } from "react-bootstrap";
+import {
+  Container,
+  Table,
+  Button,
+  Spinner,
+  Modal,
+  Form,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import "./UserCenterPage.css";
 
-// Función para convertir el rol numérico a texto
 const getRoleName = (role) => {
   const numericRole = parseInt(role);
   switch (numericRole) {
@@ -19,27 +27,29 @@ const getRoleName = (role) => {
   }
 };
 
-
 const UserCenterPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [toastVariant, setToastVariant] = useState("success");
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
 
     const fetchUsers = async () => {
       try {
-        const response = await fetch("https://localhost:7234/api/User/GetAllUsers", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          "https://localhost:7234/api/User/GetAllUsers",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
@@ -57,18 +67,16 @@ const UserCenterPage = () => {
     fetchUsers();
   }, []);
 
-  //Función para abrir el modal de edición
   const handleEdit = (user) => {
     setSelectedUser(user);
     setShowModal(true);
   };
 
   const handleDelete = (user) => {
-    setSelectedUser(user)
+    setSelectedUser(user);
     setShowConfirmModal(true);
-  }
+  };
 
-  //Función para actualizar los datos del usuario
   const handleSave = async () => {
     if (!selectedUser) return;
 
@@ -83,18 +91,21 @@ const UserCenterPage = () => {
         State: selectedUser.state,
       };
 
-
-      const response = await fetch(`https://localhost:7234/api/User/UpdateUser/${selectedUser.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        `https://localhost:7234/api/User/UpdateUser/${selectedUser.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Error: ${response.status}`);
       }
 
       const updatedUsers = users.map((user) =>
@@ -103,57 +114,65 @@ const UserCenterPage = () => {
       setUsers(updatedUsers);
 
       setToastMessage("Usuario actualizado con éxito.");
+      setToastVariant("success");
       setShowToast(true);
       setShowModal(false);
     } catch (error) {
       console.error("Error updating user:", error);
+      setToastMessage(error.message || "Error actualizando usuario.");
+      setToastVariant("danger");
+      setShowToast(true);
     }
   };
 
-
-  //Función para cambiar los valores del formulario del modal
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSelectedUser({ ...selectedUser, [name]: value });
   };
 
-  //Función para "eliminar" (actualizar estado) un usuario
   const handleRemoveUser = async () => {
     if (!selectedUser) return;
 
     const token = localStorage.getItem("jwtToken");
 
     try {
-      const response = await fetch(`https://localhost:7234/api/User/DeleteUser/${selectedUser.id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://localhost:7234/api/User/DeleteUser/${selectedUser.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
 
-      // Actualizar la lista de usuarios sin el eliminado
       const updatedUsers = users.filter((user) => user.id !== selectedUser.id);
       setUsers(updatedUsers);
 
       setToastMessage("Usuario eliminado con éxito.");
+      setToastVariant("success");
       setShowToast(true);
     } catch (error) {
       console.error("Error deleting user:", error);
       setToastMessage("Hubo un error al eliminar el usuario.");
+      setToastVariant("danger");
       setShowToast(true);
     } finally {
       setShowConfirmModal(false);
       setSelectedUser(null);
     }
-  }
+  };
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: "80vh" }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "80vh" }}
+      >
         <Spinner animation="border" />
       </div>
     );
@@ -185,10 +204,16 @@ const UserCenterPage = () => {
                 <td>{user.phoneNumber}</td>
                 <td>{user.state ? "Activo" : "Inactivo"}</td>
                 <td>
-                  <Button variant="warning" className="me-2" onClick={() => handleEdit(user)}>
+                  <Button
+                    variant="warning"
+                    className="me-2"
+                    onClick={() => handleEdit(user)}
+                  >
                     Editar
                   </Button>
-                  <Button variant="danger" onClick={() => handleDelete(user)}>Eliminar</Button>
+                  <Button variant="danger" onClick={() => handleDelete(user)}>
+                    Eliminar
+                  </Button>
                 </td>
               </tr>
             ))
@@ -202,7 +227,7 @@ const UserCenterPage = () => {
         </tbody>
       </Table>
 
-      {/* ✅ Modal para Editar Usuario */}
+      {/* Modal de Edición */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Editar Usuario</Modal.Title>
@@ -251,6 +276,7 @@ const UserCenterPage = () => {
                 <option value="1">Cliente</option>
               </Form.Select>
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Check
                 type="switch"
@@ -275,15 +301,20 @@ const UserCenterPage = () => {
         </Modal.Footer>
       </Modal>
 
+      {/* Modal de Confirmación de Eliminación */}
       <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmar Eliminación</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          ¿Estás seguro que deseas eliminar el usuario <strong>{selectedUser?.name}</strong>?
+          ¿Estás seguro que deseas eliminar el usuario{" "}
+          <strong>{selectedUser?.name}</strong>?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setShowConfirmModal(false)}
+          >
             Cancelar
           </Button>
           <Button variant="danger" onClick={handleRemoveUser}>
@@ -292,14 +323,11 @@ const UserCenterPage = () => {
         </Modal.Footer>
       </Modal>
 
-
-
-
-      {/* ✅ Toast de Notificación */}
+      {/* Toast de Notificación */}
       <ToastContainer position="top-end" className="p-3">
         <Toast
           show={showToast}
-          bg="success"
+          bg={toastVariant} //
           autohide
           delay={3000}
           onClose={() => setShowToast(false)}

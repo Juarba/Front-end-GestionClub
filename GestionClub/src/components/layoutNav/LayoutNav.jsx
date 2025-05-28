@@ -1,11 +1,10 @@
 import React from "react";
 import { Navbar, Nav, Button, Container, Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import './LayoutNav.css';
-import { useAuth } from '../../context/AuthContext';
+import "./LayoutNav.css";
+import { useAuth } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import UserDropdown from "../userDropdown/UserDropdown";
-
 
 const LayoutNav = () => {
   const navigate = useNavigate();
@@ -24,8 +23,8 @@ const LayoutNav = () => {
   };
 
   const handleUserCenter = () => {
-    navigate("/userCenter")
-  }
+    navigate("/userCenter");
+  };
 
   const handleLogin = () => {
     navigate("/login");
@@ -33,7 +32,7 @@ const LayoutNav = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   //Extrae el rol desde el token
@@ -42,7 +41,10 @@ const LayoutNav = () => {
   if (token) {
     try {
       const decoded = jwtDecode(token);
-      userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? null;
+      userRole =
+        decoded[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ] ?? null;
     } catch (error) {
       console.error("Error decoding token:", error);
     }
@@ -53,18 +55,42 @@ const LayoutNav = () => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
       <Container>
-        <Navbar.Brand onClick={handleMainPage} className="fw-bold">Gestion Club</Navbar.Brand>
+        <Navbar.Brand onClick={handleMainPage} className="fw-bold">
+          Gestion Club
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link onClick={handleMainPage} className="nav-link-hover-green fw-bold text-success">INICIO</Nav.Link>
-            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CLUB</Nav.Link>
-            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">SERVICIOS</Nav.Link>
-            <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">ACTIVIDADES</Nav.Link>
-            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>
+            <Nav.Link
+              onClick={handleMainPage}
+              className="nav-link-hover-green fw-bold text-success"
+            >
+              INICIO
+            </Nav.Link>
+            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">
+              CLUB
+            </Nav.Link>
+            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">
+              SERVICIOS
+            </Nav.Link>
+            <Nav.Link
+              onClick={handleBookingPage}
+              className="nav-link-hover-green"
+            >
+              ACTIVIDADES
+            </Nav.Link>
+            <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">
+              CONTACTO
+            </Nav.Link>
           </Nav>
           <Nav className="me-auto">
-            <Button onClick={handleBookingPage} variant="success" className="rounded-pill nav-link-hover-white">RESERVAR CANCHA</Button>
+            <Button
+              onClick={handleBookingPage}
+              variant="success"
+              className="rounded-pill nav-link-hover-white"
+            >
+              RESERVAR CANCHA
+            </Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -85,7 +111,10 @@ const LayoutNav = () => {
       {isLoggedIn ? (
         <UserDropdown logout={logout} className="user-dropdown" />
       ) : (
-        <Nav.Link onClick={handleLogin} className="rounded-pill nav-link-hover-green me-3">
+        <Nav.Link
+          onClick={handleLogin}
+          className="rounded-pill nav-link-hover-green me-3"
+        >
           Inicia Sesión
         </Nav.Link>
       )}
