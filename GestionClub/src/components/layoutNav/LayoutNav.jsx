@@ -63,8 +63,8 @@ const LayoutNav = () => {
   const showMenu = userRole === "Admin" || userRole === "Gerente";
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
-      <img onClick={handleMainPage}  src={logo} alt="Logo" className="mb-3" style={{ width: 100, cursor: 'pointer' }} />
+    <Navbar bg="dark" variant="dark" expand="lg" >
+      <img onClick={handleMainPage}  src={logo} alt="Logo" style={{ width: 60, cursor: 'pointer' }} />
       <Container>
         <Navbar.Brand onClick={handleMainPage} className="fw-bold" style={{ cursor: 'pointer' }}>Gestion Club</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
