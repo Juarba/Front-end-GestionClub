@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import { Calendar, User, Users, Mail, Phone, Info, BadgeAlert } from 'lucide-react';
@@ -7,10 +7,6 @@ import {Calendar as Cal,  dayjsLocalizer, Views} from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import './BookingPage.css';
 import dayjs from "dayjs";
-
-
-const schedule = ['08:00', '9:30', '11:00', '12:30', 'etc'];
-const courts = ['Cancha 1', 'Cancha 2', 'Cancha 3', 'Cancha 4'];
 
 const BookingPage = () => {
   const navigate = useNavigate();
@@ -25,25 +21,12 @@ const BookingPage = () => {
   const tokenDecoded = jwtDecode(token);
   const [bookingsList, setBookingList] = useState([]);
   const [availabilityList, setAvailabilityList] = useState([]);
-  const [currentView, setCurrentView] = useState('week');
+  const [currentView, setCurrentView] = useState('month');
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [start, setStart] = useState();
-  const [end, setEnd] = useState();
-  
-  const handleDateNavigate = (newDate) => {
-    const minDate = new Date(bookingsList[0].startTime);
-    const maxDate = new Date(bookingsList[bookingsList.length - 1].finishTime);
-
-    if (newDate < minDate) {
-      setCurrentDate(minDate);
-    } else if (newDate > maxDate) {
-      setCurrentDate(maxDate);
-    } else {
-      setCurrentDate(newDate);
-    }
-
-  }
-  
+  const [openingTime, setOpeningTime] = useState(new Date());
+  const [closingTime, setClosingTime] = useState(new Date());
+  const [bookingListMapped, setBookingListMapped] = useState([]);
+    
   useEffect(() => {
     const getAllData = async () => {
       try {
@@ -60,6 +43,19 @@ const BookingPage = () => {
 
         const data = await response.json();
         setBookingList(data);
+
+        setBookingListMapped(
+         data.map(booking => ({
+          title: `${booking.available ? "Disponible" : "Ocupado"}`, 
+          start: new Date(booking.startTime),
+          end: new Date(booking.finishTime),
+          resource: {
+            court: booking.court.id,
+            available: booking.available,
+          }
+         })) 
+        )
+        console.log(bookingListMapped)
       }
 
       catch (error) {
@@ -88,14 +84,55 @@ const BookingPage = () => {
     getAllData();
   }, [])
 
+  const handleDateNavigate = (newDate) => {
+    const minDate = new Date(bookingsList[0].startTime);
+    const maxDate = new Date(bookingsList[bookingsList.length - 1].finishTime);
+
+    if (newDate < minDate) {
+      setCurrentDate(minDate);
+    } else if (newDate > maxDate) {
+      setCurrentDate(maxDate);
+    } else {
+      setCurrentDate(newDate);
+    }
+  }
+
+  const getEventStyle = (event) => {
+    const backgroundColor = event.resource?.available ? '#4caf50' : '#f44336'; //4caf50 = verde | f44336 = rojo
+    return {
+      style: {
+        backgroundColor,
+        color: 'white',
+        borderRadius: '5px',
+        border: "solid 5px ",
+        maxHeight:"100px"
+      }
+    };
+  };
+
+  const onSelectEvent = () => {
+    console.log("hola")
+    return {
+      style: {
+        backgroundColor:"#f44336"
+      }
+    }
+  }
+
+  const CustomEvent = ({ event }) => (
+  <div style={{}}>
+    <strong>{event.resource.available ? "Disponible" : "Ocupado" }</strong><br />
+    <span>Cancha {event.resource.court}</span>
+  </div>
+  );
   
-  console.log("avalabilitiList:",availabilityList);
+  //console.log("avalabilitiList:",availabilityList);
   console.log("bookingsList:",bookingsList);
   return (
     <Container className="booking-container flex">
-      <h6 className="booking-title">Reservas</h6>
-      <Row >
-        <Col md={4} className="info-col mt-3">
+      <h2 className="booking-title">Reserva tu cancha</h2>
+      <Row className=''>
+        {/* <Col md={4} className="info-col mt-3">
           <Card className="mb-3">
             <Card.Body>
               <Card.Title><Info size={40} className="me-1" />Información</Card.Title>
@@ -127,53 +164,31 @@ const BookingPage = () => {
               <p className="medium mt-3 mb-0">En caso etc etc</p>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
 
-        <Col md={8} className="mt-3">
+        <Col md={12} className="mt-3">
           <Card>
             <Card.Body>
               <Cal 
                 localizer={localizer}
                 view ={currentView}
                 onView={(view) => setCurrentView(view)}
-                views={['month', 'week', 'day']}
+                views={['month', 'day']}
                 date={currentDate}
-                onNavigate={handleDateNavigate}
+                onNavigate={handleDateNavigate} 
+                events={bookingListMapped} //mapeo de bookings
+                onSelectEvent={onSelectEvent} //este evento se ejecutara cuando se hace click en un booking
+                eventPropGetter={getEventStyle} 
+                step={30}
+                timeslots={1}
+                components={{
+                  event: CustomEvent
+                }}
                 style={{
-                height: "80vh",
-                width: "100%",
-              }}/>
-
-
-              {/* <h5>Reservas</h5>
-              <table className="table table-bordered text-center booking-table mt-3">
-                <thead>
-                  <tr>
-                    {courts.map((court, id) => (
-                      <th key={id}>{court}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {schedule.map((time, id) => (
-                    <tr key={id}>
-                      <td>{time}</td>
-                      <td>Libre</td>
-                      <td>Ocupado</td>
-                      <td>Horario de clase</td>
-                      <td>etc</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="d-flex justify-content-end gap-4 mt-3">
-                <Button variant="outline-dark" className="rounded-pill px-3 ">
-                  Cancelar
-                </Button>
-                <Button onClick={handleOrder} variant="dark" className="rounded-pill px-4">
-                  Siguiente
-                </Button>
-              </div> */}
+                height: "100vh",
+                width: "auto",
+                }}
+              />
             </Card.Body>
           </Card>
         </Col>
@@ -183,4 +198,3 @@ const BookingPage = () => {
 }
 
 export default BookingPage;
-
