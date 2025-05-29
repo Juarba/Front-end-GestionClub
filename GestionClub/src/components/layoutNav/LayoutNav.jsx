@@ -1,12 +1,11 @@
 import React from "react";
 import { Navbar, Nav, Button, Container, Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import './LayoutNav.css';
-import { useAuth } from '../../context/AuthContext';
+import "./LayoutNav.css";
+import { useAuth } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import UserDropdown from "../userDropdown/UserDropdown";
 import logo from "../../assets/LogoSinFondo.png"
-
 
 const LayoutNav = () => {
   const navigate = useNavigate();
@@ -29,8 +28,8 @@ const LayoutNav = () => {
   };
 
   const handleUserCenter = () => {
-    navigate("/userCenter")
-  }
+    navigate("/userCenter");
+  };
 
   const handleLogin = () => {
     navigate("/login");
@@ -38,7 +37,7 @@ const LayoutNav = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   const handleNews = () => {
@@ -54,7 +53,10 @@ const LayoutNav = () => {
   if (token) {
     try {
       const decoded = jwtDecode(token);
-      userRole = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? null;
+      userRole =
+        decoded[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ] ?? null;
     } catch (error) {
       console.error("Error decoding token:", error);
     }
@@ -78,7 +80,13 @@ const LayoutNav = () => {
             <Nav.Link onClick={handlePagoPage} className="nav-link-hover-green">PagoPrueba</Nav.Link>
           </Nav>
           <Nav className="me-auto">
-            <Button onClick={handleBookingPage} variant="success" className="rounded-pill nav-link-hover-white">RESERVAR CANCHA</Button>
+            <Button
+              onClick={handleBookingPage}
+              variant="success"
+              className="rounded-pill nav-link-hover-white"
+            >
+              RESERVAR CANCHA
+            </Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -99,7 +107,10 @@ const LayoutNav = () => {
       {isLoggedIn ? (
         <UserDropdown logout={logout} className="user-dropdown" />
       ) : (
-        <Nav.Link onClick={handleLogin} className="rounded-pill nav-link-hover-green me-3">
+        <Nav.Link
+          onClick={handleLogin}
+          className="rounded-pill nav-link-hover-green me-3"
+        >
           Inicia Sesión
         </Nav.Link>
       )}

@@ -1,139 +1,172 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./registerCss/StepOne.css";
 
 const StepOne = ({ formData, setFormData, onNext }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [emailExists, setEmailExists] = useState(false);
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
 
-    const handleNext = async () => {
+    if (e.target.name === "email") {
+      setEmailExists(false);
+    }
+  };
+
+  const handleNext = async () => {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.repeatPassword ||
+      !formData.phoneNumber
+    ) {
+      alert("Por favor completa todos los campos");
+      return;
+    }
+
+    if (formData.password !== formData.repeatPassword) {
+      alert("Las contraseñas no coinciden");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "https://localhost:7234/api/User/CreateUser",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Name: formData.name,
+            Email: formData.email,
+            Password: formData.password,
+            PhoneNumber: formData.phoneNumber,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+
         if (
-            !formData.name ||
-            !formData.email ||
-            !formData.password ||
-            !formData.repeatPassword ||
-            !formData.phoneNumber
+          errorData.message &&
+          errorData.message.toLowerCase().includes("ya existe")
         ) {
-            alert("Por favor completa todos los campos");
-            return;
+          setEmailExists(true);
+        } else {
+          alert(`Error: ${errorData.message}`);
         }
 
-        if (formData.password !== formData.repeatPassword) {
-            alert("Las contraseñas no coinciden");
-            return;
-        }
+        return;
+      }
 
-        try {
-            const response = await fetch("https://localhost:7234/api/User/CreateUser", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    Name: formData.name,
-                    Email: formData.email,
-                    Password: formData.password,
-                    PhoneNumber: formData.phoneNumber,
-                }),
-            });
+      onNext();
+    } catch (error) {
+      console.error("Error al registrar usuario:", error);
+      alert("Ocurrió un error al intentar registrar al usuario.");
+    }
+  };
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
-                return;
-            }
+  const handleToLogin = () => {
+    navigate("/login");
+  };
 
-            onNext();
-        } catch (error) {
-            console.error("Error al registrar usuario:", error);
-            alert("Ocurrió un error al intentar registrar al usuario.");
-        }
+  return (
+    <div className="step-one-container">
+      <div className="step-one-form-container">
+        <h2 className="mb-4 text-center">Crear cuenta</h2>
 
-    };
-
-    const handleToLogin = () => {
-        navigate("/login");
-    };
-
-    return (
-        <div className="step-one-container">
-            <div className="step-one-form-container">
-                <h2 className="mb-4 text-center">Crear cuenta</h2>
-
-                <div className="register-toggle">
-                    <Button variant="success" onClick={handleToLogin} className="register-toggle-button text-white">Iniciar Sesión</Button>
-                    <Button variant="dark" className="register-toggle-button">Registrarme</Button>
-                </div>
-
-                <Form.Group className="mb-3">
-                    <Form.Control
-                        type="text"
-                        name="name"
-                        placeholder="Nombre"
-                        value={formData.name}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Control
-                        type="email"
-                        name="email"
-                        placeholder="Correo electrónico"
-                        value={formData.email}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Control
-                        type="password"
-                        name="password"
-                        placeholder="Contraseña"
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-4">
-                    <Form.Control
-                        type="password"
-                        name="repeatPassword"
-                        placeholder="Repetir contraseña"
-                        value={formData.repeatPassword}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-4">
-                    <Form.Control
-                        type="text"
-                        name="phoneNumber"
-                        placeholder="N° de teléfono"
-                        value={formData.phoneNumber}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
-
-                <Button variant="primary" className="w-100 mb-3" onClick={handleNext}>
-                    Registrarme
-                </Button>
-
-                <div className="login-prompt">
-                    <small>
-                        ¿Ya tienes una cuenta? <a href="#" onClick={handleToLogin}>Iniciar sesion</a>
-                    </small>
-                </div>
-            </div>
+        <div className="register-toggle">
+          <Button
+            variant="success"
+            onClick={handleToLogin}
+            className="register-toggle-button text-white"
+          >
+            Iniciar Sesión
+          </Button>
+          <Button variant="dark" className="register-toggle-button">
+            Registrarme
+          </Button>
         </div>
-    );
+
+        <Form.Group className="mb-3">
+          <Form.Control
+            type="text"
+            name="name"
+            placeholder="Nombre"
+            value={formData.name}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Control
+            type="email"
+            name="email"
+            placeholder="Correo electrónico"
+            value={formData.email}
+            onChange={handleChange}
+            isInvalid={emailExists}
+          />
+          {emailExists && (
+            <Form.Text className="text-danger">
+              Ya existe un usuario con ese correo electrónico
+            </Form.Text>
+          )}
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Control
+            type="password"
+            name="password"
+            placeholder="Contraseña"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-4">
+          <Form.Control
+            type="password"
+            name="repeatPassword"
+            placeholder="Repetir contraseña"
+            value={formData.repeatPassword}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-4">
+          <Form.Control
+            type="text"
+            name="phoneNumber"
+            placeholder="N° de teléfono"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Button variant="primary" className="w-100 mb-3" onClick={handleNext}>
+          Registrarme
+        </Button>
+
+        <div className="login-prompt">
+          <small>
+            ¿Ya tienes una cuenta?{" "}
+            <a href="#" onClick={handleToLogin}>
+              Iniciar sesión
+            </a>
+          </small>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default StepOne;
