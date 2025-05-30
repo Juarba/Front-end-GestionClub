@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 
-const MercadoPagoButton = ({ titulo, precio, cantidad }) => {
+const MercadoPagoButton = ({ titulo, precio, cantidad, cuotaId, userId }) => {
   const [preferenceId, setPreferenceId] = useState(null);
 
   useEffect(() => {
@@ -20,7 +20,9 @@ const MercadoPagoButton = ({ titulo, precio, cantidad }) => {
           body: JSON.stringify({
             titulo,
             precio,
-            cantidad
+            cantidad,
+            cuotaId,
+            userId
           })
         });
 
@@ -37,7 +39,7 @@ const MercadoPagoButton = ({ titulo, precio, cantidad }) => {
     };
 
     crearPreferencia();
-  }, [titulo, precio, cantidad]);
+  }, [titulo, precio, cantidad, cuotaId, userId]);
 
   return (
     <div>

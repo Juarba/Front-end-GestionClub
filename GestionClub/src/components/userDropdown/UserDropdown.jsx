@@ -132,6 +132,7 @@ const UserDropdown = ({ logout }) => {
         </Dropdown.Toggle>
         <Dropdown.Menu>
           <Dropdown.Item onClick={handleShow}>Mi cuenta</Dropdown.Item>
+          <Dropdown.Item onClick={() => navigate("/mis-cuotas")}>Mis Cuotas</Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item onClick={handleLogout}>Cerrar sesión</Dropdown.Item>
         </Dropdown.Menu>
