@@ -22,7 +22,7 @@ import PagoPage from "./components/pago/PagoPage";
 import SuccessPage from "./components/pago/SuccessPage";
 import FailurePage from "./components/pago/FailurePage";
 import PendingPage from "./components/pago/PendingPage";
-
+import MisCuotasPage from "./components/cuotas/MisCuotasPage";
 function App() {
   const router = createBrowserRouter([
     {
@@ -164,7 +164,15 @@ function App() {
           <PendingPage />
         </Layout>
       ),
-    }
+    },
+    {
+      path: "/mis-cuotas",
+      element: (
+        <Layout>
+          <MisCuotasPage />
+        </Layout>
+      ),
+    },
   ]);
 
   return <RouterProvider router={router} />;
