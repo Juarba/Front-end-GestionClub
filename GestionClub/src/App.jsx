@@ -11,7 +11,6 @@ import AboutUs from "./components/aboutUs/AboutUs";
 import ServicePage from "./components/servicePage/servicePage";
 import BookingPage from "./components/bookingPage/BookingPage";
 import UserCenterPage from "./components/userCenter/UserCenterPage";
-import NewsList from "./components/news/NewsList";
 import NewsDashboard from "./components/news/NewsDashboard";
 import NotFound from "./components/notFound/NotFound";
 import ResetPassword from "./components/resetPassword/ResetPassword";
@@ -23,6 +22,7 @@ import SuccessPage from "./components/pago/SuccessPage";
 import FailurePage from "./components/pago/FailurePage";
 import PendingPage from "./components/pago/PendingPage";
 import MisCuotasPage from "./components/cuotas/MisCuotasPage";
+import MonthlyFee from "./components/monthlyFee/MonthlyFee";
 function App() {
   const router = createBrowserRouter([
     {
@@ -110,6 +110,14 @@ function App() {
       element: (
         <Layout>
           <NewsDashboard />
+        </Layout>
+      ),
+    },
+    {
+      path: "/monthlyFee",
+      element: (
+        <Layout>
+          <MonthlyFee/>
         </Layout>
       ),
     },

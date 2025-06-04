@@ -43,6 +43,10 @@ const LayoutNav = () => {
   const handleNews = () => {
     navigate("/news");
   }
+
+  const handleMonthlyFee = () => {
+    navigate("/monthlyFee")
+  }
   //MERCADOPAGO
  const handlePagoPage = () => {
     navigate("/pago");
@@ -68,25 +72,13 @@ const LayoutNav = () => {
     <Navbar bg="dark" variant="dark" expand="lg" >
       <img onClick={handleMainPage}  src={logo} alt="Logo" style={{ width: 60, cursor: 'pointer' }} />
       <Container>
-        <Navbar.Brand onClick={handleMainPage} className="fw-bold" style={{ cursor: 'pointer' }}>Gestion Club</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto">
             <Nav.Link onClick={handleMainPage} className="nav-link-hover-green fw-bold text-success">INICIO</Nav.Link>
-            <Nav.Link onClick={handleServicePage} className="nav-link-hover-green">SERVICIOS</Nav.Link>
             <Nav.Link onClick={handleNews} className="nav-link-hover-green">CLUB</Nav.Link>
-            <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">ACTIVIDADES</Nav.Link>
             <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>
-            <Nav.Link onClick={handlePagoPage} className="nav-link-hover-green">PagoPrueba</Nav.Link>
-          </Nav>
-          <Nav className="me-auto">
-            <Button
-              onClick={handleBookingPage}
-              variant="success"
-              className="rounded-pill nav-link-hover-white"
-            >
-              RESERVAR CANCHA
-            </Button>
+            <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">RESERVAR CANCHA</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -99,6 +91,9 @@ const LayoutNav = () => {
             <Dropdown.Menu>
               <Dropdown.Item onClick={handleUserCenter}>
                 Centro de Usuario
+              </Dropdown.Item>
+              <Dropdown.Item onClick={handleMonthlyFee}>
+                Generar Cuotas
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
