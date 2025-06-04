@@ -11,23 +11,35 @@ const SuccessPage = () => {
 
     if (userId && cuotaId) {
       const token = localStorage.getItem("jwtToken");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
 
-      fetch("https://localhost:7234/api/Payment/mark-paid", {
+      const markFeePaid = fetch("https://localhost:7234/api/Payment/mark-paid", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers,
         body: JSON.stringify({
           userId: parseInt(userId),
           monthlyFeeId: parseInt(cuotaId),
         }),
-      })
-        .then((res) => {
-          if (!res.ok) throw new Error("No se pudo actualizar la cuota como pagada.");
+      });
+
+      const markUserPaid = fetch("https://localhost:7234/api/User/MarkUserPaid", {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({
+          userId: parseInt(userId),
+        }),
+      });
+
+      Promise.all([markFeePaid, markUserPaid])
+        .then(async ([res1, res2]) => {
+          if (!res1.ok) throw new Error("Error al marcar la cuota como pagada.");
+          if (!res2.ok) throw new Error("Error al marcar el usuario como pagado.");
         })
         .catch((err) => {
-          console.error("Error al marcar la cuota como pagada:", err);
+          console.error("Error en la actualización de estado:", err);
         });
     }
   }, [location]);

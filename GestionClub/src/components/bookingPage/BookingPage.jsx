@@ -50,7 +50,7 @@ const BookingPage = () => {
           start: new Date(booking.startTime),
           end: new Date(booking.finishTime),
           resource: {
-            court: booking.court.id,
+            court: booking.courtId,
             available: booking.available,
           }
          })) 
