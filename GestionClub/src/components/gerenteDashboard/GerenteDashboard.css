@@ -1,6 +1,6 @@
 .dashboard-container {
   background-color: rgb(220, 248, 220);
-  color: white;
+  color: rgb(24, 23, 23);
   min-height: 100vh;
   padding: 2rem;
 }
@@ -19,7 +19,7 @@
 }
 
 .dashboard-card-value {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
@@ -31,3 +31,28 @@
 .table-dark-custom thead th {
   border-bottom: 2px solid #444;
 }
+
+.react-calendar__navigation button {
+    color: #1d1d1d;
+    font-weight: bold;
+}
+.calendar {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.react-calendar__tile{
+    color: black;
+}
+
+.react-calendar__tile--active {
+  background: #6fac81 !important;
+  color: white;
+}
+
+.react-calendar__tile--hasActive {
+  background: #dcf8dc !important;
+  color: black;
+}
+

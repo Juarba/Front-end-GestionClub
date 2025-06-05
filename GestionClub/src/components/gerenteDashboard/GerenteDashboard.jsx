@@ -225,7 +225,6 @@ const GerenteDashboard = () => {
     }, 1000);
   }, []);
 
-  // Filtrar reservas del mes seleccionado
   const reservasFiltradas = reservas.filter(r => {
     const f = new Date(r.fechaHora);
     return (
@@ -249,7 +248,7 @@ const GerenteDashboard = () => {
       {
         label: `Reservas en ${fechaSeleccionada.toLocaleString('default', { month: 'long' })}`,
         data: Object.values(reservasAgrupadas),
-        backgroundColor: "#242424",
+        backgroundColor: 'rgba(75, 192, 192, 0.88)'
       }
     ]
   };
@@ -258,85 +257,89 @@ const GerenteDashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <Row className="mb-4">
+      <Row>
+        {/* Columna izquierda: calendario */}
         <Col md={3}>
+          <h5 className="mb-3">Seleccionar mes</h5>
           <Calendar
             value={fechaSeleccionada}
             onChange={setFechaSeleccionada}
             view="month"
             maxDetail="year"
-            className="mb-3"
           />
         </Col>
-      </Row>
 
-      <Row className="mb-4">
-        <Col md={4}>
-          <Card className="dashboard-card">
-            <Card.Body>
-              <div className="dashboard-card-title">Usuarios con reservas</div>
-              <div className="dashboard-card-value">{usuariosConReserva.length}</div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card className="dashboard-card">
-            <Card.Body>
-              <div className="dashboard-card-title">Usuarios con cuota activa</div>
-              <div className="dashboard-card-value">{usuariosActivos}</div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card className="dashboard-card">
-            <Card.Body>
-              <div className="dashboard-card-title">Recaudación estimada</div>
-              <div className="dashboard-card-value">
-                ${((recaudacion / reservas.length) * reservasFiltradas.length).toFixed(2)}
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+        {/* Columna derecha: todo lo demás */}
+        <Col md={9}>
+          <Row className="mb-4">
+            <Col md={4}>
+              <Card className="dashboard-card">
+                <Card.Body>
+                  <div className="dashboard-card-title">Usuarios con reservas</div>
+                  <div className="dashboard-card-value">{usuariosConReserva.length}</div>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={4}>
+              <Card className="dashboard-card">
+                <Card.Body>
+                  <div className="dashboard-card-title">Usuarios con cuota activa</div>
+                  <div className="dashboard-card-value">{usuariosActivos}</div>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col md={4}>
+              <Card className="dashboard-card">
+                <Card.Body>
+                  <div className="dashboard-card-title">Recaudación estimada</div>
+                  <div className="dashboard-card-value">
+                    ${((recaudacion / reservas.length) * reservasFiltradas.length).toFixed(2)}
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
 
-      <Row className="mb-4">
-        <Col>
-          <Card className="dashboard-card">
-            <Card.Body>
-              <h5 className="mb-3">Gráfico de reservas por día</h5>
-              <Bar data={chartData} />
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+          <Row className="mb-4">
+            <Col>
+              <Card className="dashboard-card">
+                <Card.Body>
+                  <h5 className="mb-3">Gráfico de reservas por día</h5>
+                  <Bar data={chartData} />
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
 
-      <Row>
-        <Col>
-          <Card className="dashboard-card">
-            <Card.Body>
-              <h5 className="mb-3">Reservas del mes</h5>
-              <Table className="table-dark-custom" hover responsive>
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Cancha</th>
-                    <th>Usuario</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {reservasFiltradas.map(r => (
-                    <tr key={r.id}>
-                      <td>{new Date(r.fechaHora).toLocaleDateString()}</td>
-                      <td>{new Date(r.fechaHora).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                      <td>{r.cancha?.nombre}</td>
-                      <td>{r.usuario?.nombreCompleto}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Card>
+          <Row>
+            <Col>
+              <Card className="dashboard-card">
+                <Card.Body>
+                  <h5 className="mb-3">Reservas del mes</h5>
+                  <Table className="table-dark-custom" hover responsive>
+                    <thead>
+                      <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Cancha</th>
+                        <th>Usuario</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {reservasFiltradas.map(r => (
+                        <tr key={r.id}>
+                          <td>{new Date(r.fechaHora).toLocaleDateString()}</td>
+                          <td>{new Date(r.fechaHora).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                          <td>{r.cancha?.nombre}</td>
+                          <td>{r.usuario?.nombreCompleto}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </div>
