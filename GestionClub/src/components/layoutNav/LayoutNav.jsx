@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navbar, Nav, Button, Container, Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./LayoutNav.css";
@@ -6,8 +6,10 @@ import { useAuth } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import UserDropdown from "../userDropdown/UserDropdown";
 import logo from "../../assets/LogoSinFondo.png"
+import CourtManagerModal from "../courtManagerModal/CourtManagerModal";
 
 const LayoutNav = () => {
+  const [showCourtModal, setShowCourtModal] = useState(false);
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useAuth();
 
@@ -48,7 +50,7 @@ const LayoutNav = () => {
     navigate("/monthlyFee")
   }
   //MERCADOPAGO
- const handlePagoPage = () => {
+  const handlePagoPage = () => {
     navigate("/pago");
   };
   //Extrae el rol desde el token
@@ -59,7 +61,7 @@ const LayoutNav = () => {
       const decoded = jwtDecode(token);
       userRole =
         decoded[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ] ?? null;
     } catch (error) {
       console.error("Error decoding token:", error);
@@ -70,7 +72,7 @@ const LayoutNav = () => {
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" >
-      <img onClick={handleMainPage}  src={logo} alt="Logo" style={{ width: 60, cursor: 'pointer' }} />
+      <img onClick={handleMainPage} src={logo} alt="Logo" style={{ width: 60, cursor: 'pointer' }} />
       <Container>
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
@@ -93,7 +95,10 @@ const LayoutNav = () => {
                 Centro de Usuario
               </Dropdown.Item>
               <Dropdown.Item onClick={handleMonthlyFee}>
-                Generar Cuotas
+                Gestión de Cuotas
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => setShowCourtModal(true)}>
+                Gestión de canchas
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -109,7 +114,9 @@ const LayoutNav = () => {
           Inicia Sesión
         </Nav.Link>
       )}
+      <CourtManagerModal show={showCourtModal} onClose={() => setShowCourtModal(false)} />
     </Navbar>
+    
   );
 };
 
