@@ -15,6 +15,8 @@ import NewsDashboard from "./components/news/NewsDashboard";
 import NotFound from "./components/notFound/NotFound";
 import ResetPassword from "./components/resetPassword/ResetPassword";
 import RestorePassword from "./components/restorePassword/RestorePassword";
+import MisReservas from "./components/misReservas/misReservas";
+
 
 //MERCADOPAGO
 import PagoPage from "./components/pago/PagoPage";
@@ -134,6 +136,14 @@ function App() {
       element: (
         <Layout>
           <NotFound />
+        </Layout>
+      ),
+    },
+    {
+      path: "/misReservas",
+      element: (
+        <Layout>
+          <MisReservas />
         </Layout>
       ),
     },
