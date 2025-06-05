@@ -18,8 +18,14 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { token } = await authenticateUser(email, password);
+      const response = await authenticateUser(email, password);
+      console.log("Respuesta login:", response);
+      const { token } = response;
+      const userEmail = email;
+
       login(token);
+      localStorage.setItem("userEmail", userEmail);
+
       setMessage('Inicio de sesión exitoso');
       navigate('/', { state: { loginSuccess: true } });
     } catch (error) {
