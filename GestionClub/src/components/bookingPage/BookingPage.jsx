@@ -127,7 +127,11 @@ const BookingPage = () => {
         }
       );
 
-      if (!response.ok) throw new Error("Error al cancelar");
+      if (!response.ok) {
+        const errorData = await response.json(); // ⬅️ Lee el cuerpo del error
+        throw new Error(errorData.error || "Error al cancelar");
+      }
+
 
       alert("🗑️ ¡Reserva cancelada!");
 
@@ -142,7 +146,7 @@ const BookingPage = () => {
       setShowModal(false);
       setSelectedTurno(null);
     } catch (err) {
-      alert("❌ No se pudo cancelar la reserva");
+      alert(`${err.message}`);
     }
   };
 
