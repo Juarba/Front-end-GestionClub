@@ -14,6 +14,8 @@ const BookingPage = () => {
   const [availability, setAvailability] = useState([]);
   const [selectedTurno, setSelectedTurno] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,10 +46,9 @@ const BookingPage = () => {
   });
 
   const handleSelectTurno = (turno) => {
-    if (turno.available) {
-      setSelectedTurno(turno);
-      setShowModal(true);
-    }
+    setSelectedTurno(turno);
+    setIsCancelling(!turno.available); // Si está ocupado, es para cancelar
+    setShowModal(true);
   };
 
   const confirmBooking = async () => {
@@ -81,6 +82,39 @@ const BookingPage = () => {
       alert("❌ No se pudo confirmar la reserva");
     }
   };
+
+  const cancelBooking = async () => {
+    try {
+      const response = await fetch(
+        `https://localhost:7234/api/User/CancelBooking/${selectedTurno.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error("Error al cancelar");
+
+      alert("🗑️ ¡Reserva cancelada!");
+
+      setAvailability((prev) =>
+        prev.map((item) =>
+          item.id === selectedTurno.id
+            ? { ...item, available: true }
+            : item
+        )
+      );
+
+      setShowModal(false);
+      setSelectedTurno(null);
+    } catch (err) {
+      alert("❌ No se pudo cancelar la reserva");
+    }
+  };
+
 
   return (
     <Container className="booking-container">
@@ -145,19 +179,29 @@ const BookingPage = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Confirmar Reserva</Modal.Title>
+          <Modal.Title>{isCancelling ? "Cancelar Reserva" : "Confirmar Reserva"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          ¿Deseás reservar la cancha {selectedTurno?.courtId} de{" "}
-          {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
-          {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
+          {isCancelling ? (
+            <>
+              ¿Deseás <strong>cancelar</strong> la reserva de la cancha {selectedTurno?.courtId} de{" "}
+              {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
+              {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
+            </>
+          ) : (
+            <>
+              ¿Deseás <strong>reservar</strong> la cancha {selectedTurno?.courtId} de{" "}
+              {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
+              {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
+            </>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={confirmBooking}>
-            Confirmar
+          <Button variant="primary" onClick={isCancelling ? cancelBooking : confirmBooking}>
+            {isCancelling ? "Cancelar Reserva" : "Confirmar"}
           </Button>
         </Modal.Footer>
       </Modal>
