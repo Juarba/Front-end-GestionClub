@@ -5,31 +5,62 @@ import "react-calendar/dist/Calendar.css";
 import "./BookingPage.css";
 import dayjs from "dayjs";
 import { jwtDecode } from "jwt-decode";
+import BookingManagerModal from "../bookingModal/BookingModal";
 
 const BookingPage = () => {
   const token = localStorage.getItem("jwtToken");
   const tokenDecoded = jwtDecode(token);
-
+  //Extrae el rol desde el token
+  let userRole = null;
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      userRole =
+        decoded[
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ] ?? null;
+    } catch (error) {
+      console.error("Error decoding token:", error);
+    }
+  }
+  const showButton = userRole === "Admin" || userRole === "Gerente";
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availability, setAvailability] = useState([]);
   const [selectedTurno, setSelectedTurno] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showManagerModal, setShowManagerModal] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
 
 
-  useEffect(() => {
-    const fetchData = async () => {
+
+
+  const fetchData = async () => {
+    try {
       const response = await fetch(`https://localhost:7234/api/Booking/GetAllBookings`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (!response.ok) {
+        throw new Error("Error al cargar reservas");
+      }
+
       const data = await response.json();
       setAvailability(data);
-    };
+    } catch (error) {
+      console.error("Error al obtener las reservas:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
+
+
+
+
 
   const filteredTurnos = availability
     .filter((turno) => dayjs(turno.startTime).isSame(selectedDate, "day"))
@@ -129,6 +160,13 @@ const BookingPage = () => {
               dayjs(date).isSame(dayjs(), "day") ? "today-tile" : null
             }
           />
+          {showButton &&
+            <div className="mt-3 d-flex justify-content-start">
+              <Button variant="success" onClick={() => setShowManagerModal(true)}>
+                Crear reservas
+              </Button>
+            </div>}
+
         </Col>
 
         <Col md={7}>
@@ -205,6 +243,12 @@ const BookingPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <BookingManagerModal
+        show={showManagerModal}
+        onFetch={fetchData}
+        onClose={() => setShowManagerModal(false)}
+      />
+
     </Container>
   );
 };
