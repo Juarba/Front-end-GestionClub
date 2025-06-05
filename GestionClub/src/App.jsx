@@ -15,6 +15,7 @@ import NewsDashboard from "./components/news/NewsDashboard";
 import NotFound from "./components/notFound/NotFound";
 import ResetPassword from "./components/resetPassword/ResetPassword";
 import RestorePassword from "./components/restorePassword/RestorePassword";
+import GerenteDashboard from "./components/gerenteDashboard/GerenteDashboard";
 
 //MERCADOPAGO
 import PagoPage from "./components/pago/PagoPage";
@@ -118,6 +119,14 @@ function App() {
       element: (
         <Layout>
           <MonthlyFee/>
+        </Layout>
+      ),
+    },
+{
+      path: "/gerenteDashboard",
+      element: (
+        <Layout>
+          <GerenteDashboard/>
         </Layout>
       ),
     },
