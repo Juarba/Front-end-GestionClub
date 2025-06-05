@@ -1,31 +1,78 @@
-
-.booking-title {
-    text-align: left;
-    margin-bottom: 3rem;
-    font-weight: 600;
-}
 .booking-container {
-    background-color: rgb(220, 248, 220);
+    background-color: #e7fce8;
     min-height: 100vh;
-    padding: 5rem;
+    padding: 2rem 1rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.info-col .card-title {
-    font-size: 1rem;
+.booking-title {
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    font-size: 1.6rem;
+}
+.react-calendar__navigation button {
+    color: #1d1d1d;
+    font-weight: bold;
+}
+.calendar {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.react-calendar__tile{
+    color: black;
+}
+
+.today-tile {
+    background-color: #b2f2bb !important;
+    border-radius: 6px;
+}
+
+.turno-card {
+    cursor: pointer;
+    background-color: #0f9d58;
+    border-left: 5px solid #22714b;
+    transition: transform 0.2s ease;
+    padding: 0.3rem;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    height: 100%;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 50px;
+    text-align: center;
+    line-height: 1;
 }
 
-.info-box {
-    background-color: #0f172a;
-    color: white;
+.turno-card:hover {
+    transform: scale(1.01);
 }
 
-.booking-table th,
-.booking-table td {
-    vertical-align: middle;
-    font-size: 1rem;
-    padding: 0.75rem;
+.turno-card.disabled {
+    background-color: #ff0000;
+    cursor: not-allowed;
+    opacity: 0.9;
+}
+
+.turno-hora {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 0.2rem;
+}
+
+.turno-card .card-text {
+    font-size: 0.75rem;
+    color: #000;
+}
+
+.no-turnos {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 1rem;
+    text-align: center;
 }
