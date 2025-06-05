@@ -151,20 +151,21 @@ const GerenteDashboard = () => {
 
 export default GerenteDashboard;
 */
-import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Spinner, Table } from 'react-bootstrap';
-import { Bar } from 'react-chartjs-2';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import './GerenteDashboard.css';
+import React, { useEffect, useState } from "react";
+import { Row, Col, Card, Spinner, Table } from "react-bootstrap";
+import { Bar } from "react-chartjs-2";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import "./GerenteDashboard.css";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
   Tooltip,
-  Legend
-} from 'chart.js';
+  Legend,
+} from "chart.js";
+import { es } from "date-fns/locale";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -172,60 +173,56 @@ const GerenteDashboard = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [reservas, setReservas] = useState([]);
   const [recaudacion, setRecaudacion] = useState(0);
+  const [activos, setActivos] = useState([]);
+  const [horariosPopulares, setHorariosPopulares] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
 
   useEffect(() => {
-    setTimeout(() => {
-      const fakeUsuarios = [
-        { id: 1, nombre: 'Juan Pérez', cuotaActiva: true },
-        { id: 2, nombre: 'Ana Gómez', cuotaActiva: true },
-        { id: 3, nombre: 'Carlos López', cuotaActiva: false },
-        { id: 4, nombre: 'Lucía Torres', cuotaActiva: true },
-        { id: 5, nombre: 'Sofía Díaz', cuotaActiva: false }
-      ];
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
 
-      const fakeReservas = [
-        {
-          id: 101,
-          fechaHora: '2025-06-04T20:00:00',
-          cancha: { nombre: 'Cancha 1' },
-          usuario: { id: 1, nombreCompleto: 'Juan Pérez' }
-        },
-        {
-          id: 102,
-          fechaHora: '2025-06-03T21:00:00',
-          cancha: { nombre: 'Cancha 2' },
-          usuario: { id: 2, nombreCompleto: 'Ana Gómez' }
-        },
-        {
-          id: 103,
-          fechaHora: '2025-05-15T21:30:00',
-          cancha: { nombre: 'Cancha 2' },
-          usuario: { id: 2, nombreCompleto: 'Ana Gómez' }
-        },
-        {
-          id: 104,
-          fechaHora: '2025-05-27T20:00:00',
-          cancha: { nombre: 'Cancha 3' },
-          usuario: { id: 3, nombreCompleto: 'Carlos López' }
-        },
-        {
-          id: 105,
-          fechaHora: '2025-04-10T20:00:00',
-          cancha: { nombre: 'Cancha 1' },
-          usuario: { id: 4, nombreCompleto: 'Lucía Torres' }
-        }
-      ];
+        const [
+          resUsuarios,
+          resReservas,
+          resRecaudacion,
+          resActivos,
+          resHorarios,
+        ] = await Promise.all([
+          fetch("https://localhost:7042/api/User/GetAllUsers", { headers }),
+          fetch("https://localhost:7042/api/Booking/GetAllBookings", { headers }),
+          fetch("https://localhost:7234/api/Payment/GetCurrentMonthRevenue", { headers }),
+          fetch("https://localhost:7234/api/User/GetActivesUsers", { headers }),
+          fetch("https://localhost:7234/api/Booking/GetMostFrequentBookingHours", { headers }),
+        ]);
 
-      setUsuarios(fakeUsuarios);
-      setReservas(fakeReservas);
-      setRecaudacion(123456);
-      setLoading(false);
-    }, 1000);
+        const usuariosData = await resUsuarios.json();
+        const reservasData = await resReservas.json();
+        const recaudacionData = await resRecaudacion.json();
+        const activosData = await resActivos.json();
+        const horariosData = await resHorarios.json();
+
+        setUsuarios(usuariosData);
+        setReservas(reservasData);
+        setRecaudacion(recaudacionData.total);
+        setActivos(activosData);
+        setHorariosPopulares(horariosData);
+      } catch (error) {
+        console.error("Error cargando dashboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const reservasFiltradas = reservas.filter(r => {
+  const reservasFiltradas = reservas.filter((r) => {
     const f = new Date(r.fechaHora);
     return (
       f.getMonth() === fechaSeleccionada.getMonth() &&
@@ -233,8 +230,9 @@ const GerenteDashboard = () => {
     );
   });
 
-  const usuariosConReserva = [...new Set(reservasFiltradas.map(r => r.usuario.id))];
-  const usuariosActivos = usuarios.filter(u => u.cuotaActiva && usuariosConReserva.includes(u.id)).length;
+  const usuariosConReserva = [
+    ...new Set(reservasFiltradas.map((r) => r.usuario.id)),
+  ];
 
   const reservasAgrupadas = reservasFiltradas.reduce((acc, reserva) => {
     const fecha = new Date(reserva.fechaHora).toLocaleDateString();
@@ -246,33 +244,69 @@ const GerenteDashboard = () => {
     labels: Object.keys(reservasAgrupadas),
     datasets: [
       {
-        label: `Reservas en ${fechaSeleccionada.toLocaleString('default', { month: 'long' })}`,
+        label: `Reservas en ${fechaSeleccionada.toLocaleString("default", {
+          month: "long",
+        })}`,
         data: Object.values(reservasAgrupadas),
-        backgroundColor: 'rgba(75, 192, 192, 0.88)'
-      }
-    ]
+        backgroundColor: "rgba(75, 192, 192, 0.88)",
+      },
+    ],
   };
 
-  if (loading) return <div className="dashboard-container"><Spinner animation="border" variant="light" /></div>;
+  const horariosChartData = {
+    labels: horariosPopulares.map((h) => h.hora),
+    datasets: [
+      {
+        label: "Reservas",
+        data: horariosPopulares.map((h) => h.cantidad),
+        backgroundColor: "rgba(111, 172, 129, 0.8)",
+      },
+    ],
+  };
+
+  const horariosChartOptions = {
+    indexAxis: "y",
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (context) => `${context.parsed.x} reservas`,
+        },
+      },
+    },
+    scales: {
+      x: { beginAtZero: true },
+    },
+  };
+
+  if (loading)
+    return (
+      <div className="dashboard-container">
+        <Spinner animation="border" variant="light" />
+      </div>
+    );
 
   return (
     <div className="dashboard-container">
       <Row>
-        {/* Columna izquierda: calendario */}
-        <Col md={3}>
-          <h5 className="mb-3">Seleccionar mes</h5>
-          <Calendar
-            value={fechaSeleccionada}
-            onChange={setFechaSeleccionada}
-            view="month"
-            maxDetail="year"
-          />
+        <Col lg={3} className="d-flex flex-column align-items-center mb-4 mb-lg-0">
+          <div className="calendar-wrapper text-center">
+            <h5 className="mb-3">Seleccionar mes</h5>
+            <Calendar
+              className="calendar"
+              value={fechaSeleccionada}
+              onChange={setFechaSeleccionada}
+              view="month"
+              maxDetail="year"
+              locale="es"
+            />
+          </div>
         </Col>
 
-        {/* Columna derecha: todo lo demás */}
-        <Col md={9}>
+        <Col lg={9}>
           <Row className="mb-4">
-            <Col md={4}>
+            <Col md={4} className="mb-3 mb-md-0">
               <Card className="dashboard-card">
                 <Card.Body>
                   <div className="dashboard-card-title">Usuarios con reservas</div>
@@ -280,21 +314,19 @@ const GerenteDashboard = () => {
                 </Card.Body>
               </Card>
             </Col>
-            <Col md={4}>
+            <Col md={4} className="mb-3 mb-md-0">
               <Card className="dashboard-card">
                 <Card.Body>
-                  <div className="dashboard-card-title">Usuarios con cuota activa</div>
-                  <div className="dashboard-card-value">{usuariosActivos}</div>
+                  <div className="dashboard-card-title">Usuarios activos</div>
+                  <div className="dashboard-card-value">{activos.length}</div>
                 </Card.Body>
               </Card>
             </Col>
             <Col md={4}>
               <Card className="dashboard-card">
                 <Card.Body>
-                  <div className="dashboard-card-title">Recaudación estimada</div>
-                  <div className="dashboard-card-value">
-                    ${((recaudacion / reservas.length) * reservasFiltradas.length).toFixed(2)}
-                  </div>
+                  <div className="dashboard-card-title">Recaudación de cuotas</div>
+                  <div className="dashboard-card-value">${recaudacion.toLocaleString()}</div>
                 </Card.Body>
               </Card>
             </Col>
@@ -306,6 +338,17 @@ const GerenteDashboard = () => {
                 <Card.Body>
                   <h5 className="mb-3">Gráfico de reservas por día</h5>
                   <Bar data={chartData} />
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+
+          <Row className="mb-4">
+            <Col>
+              <Card className="dashboard-card">
+                <Card.Body>
+                  <h5 className="mb-3">Horarios más reservados</h5>
+                  <Bar data={horariosChartData} options={horariosChartOptions} />
                 </Card.Body>
               </Card>
             </Col>
@@ -326,10 +369,10 @@ const GerenteDashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {reservasFiltradas.map(r => (
+                      {reservasFiltradas.map((r) => (
                         <tr key={r.id}>
                           <td>{new Date(r.fechaHora).toLocaleDateString()}</td>
-                          <td>{new Date(r.fechaHora).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                          <td>{new Date(r.fechaHora).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</td>
                           <td>{r.cancha?.nombre}</td>
                           <td>{r.usuario?.nombreCompleto}</td>
                         </tr>
@@ -347,4 +390,3 @@ const GerenteDashboard = () => {
 };
 
 export default GerenteDashboard;
-
