@@ -50,6 +50,9 @@ const LayoutNav = () => {
   const handleMonthlyFee = () => {
     navigate("/monthlyFee")
   }
+  const handleManagerDashboard = () => {
+    navigate("/managerDashboard")
+  }
   //MERCADOPAGO
   const handlePagoPage = () => {
     navigate("/pago");
@@ -89,7 +92,7 @@ const LayoutNav = () => {
         <Nav className="ms-auto me-2">
           <Dropdown align="end">
             <Dropdown.Toggle variant="dark">
-              <i class="bi bi-list" style={{ fontSize: "1.3rem" }}></i>
+              <i className="bi bi-list" style={{ fontSize: "1.3rem" }}></i>
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item onClick={handleUserCenter}>
@@ -100,6 +103,11 @@ const LayoutNav = () => {
               </Dropdown.Item>
               <Dropdown.Item onClick={() => setShowCourtModal(true)}>
                 Gestión de Canchas
+
+              </Dropdown.Item>
+              <Dropdown.Item onClick={handleManagerDashboard}>
+                Dashboard Gerencia
+
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>

@@ -15,6 +15,9 @@ import NewsDashboard from "./components/news/NewsDashboard";
 import NotFound from "./components/notFound/NotFound";
 import ResetPassword from "./components/resetPassword/ResetPassword";
 import RestorePassword from "./components/restorePassword/RestorePassword";
+
+import ManagerDashboard from "./components/managerDashboard/ManagerDashboard";
+
 import MisReservas from "./components/misReservas/misReservas";
 
 
@@ -120,6 +123,14 @@ function App() {
       element: (
         <Layout>
           <MonthlyFee/>
+        </Layout>
+      ),
+    },
+{
+      path: "/managerDashboard",
+      element: (
+        <Layout>
+          <ManagerDashboard/>
         </Layout>
       ),
     },
