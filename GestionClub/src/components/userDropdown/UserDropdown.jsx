@@ -119,7 +119,12 @@ const UserDropdown = ({ logout }) => {
     }
   };
 
+  const handleMisReservas = () => {
+    navigate("/misReservas")
+  }
+
   const handleLogout = () => {
+    localStorage.removeItem("userEmail");
     logout();
     navigate("/login");
   };
@@ -133,6 +138,7 @@ const UserDropdown = ({ logout }) => {
         <Dropdown.Menu>
           <Dropdown.Item onClick={handleShow}>Mi cuenta</Dropdown.Item>
           <Dropdown.Item onClick={() => navigate("/mis-cuotas")}>Mis Cuotas</Dropdown.Item>
+          <Dropdown.Item onClick={handleMisReservas}>Mis reservas</Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item onClick={handleLogout}>Cerrar sesión</Dropdown.Item>
         </Dropdown.Menu>

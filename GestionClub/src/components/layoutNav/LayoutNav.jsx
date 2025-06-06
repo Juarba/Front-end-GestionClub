@@ -8,6 +8,7 @@ import UserDropdown from "../userDropdown/UserDropdown";
 import logo from "../../assets/LogoSinFondo.png"
 import CourtManagerModal from "../courtManagerModal/CourtManagerModal";
 
+
 const LayoutNav = () => {
   const [showCourtModal, setShowCourtModal] = useState(false);
   const navigate = useNavigate();
@@ -102,9 +103,11 @@ const LayoutNav = () => {
               </Dropdown.Item>
               <Dropdown.Item onClick={() => setShowCourtModal(true)}>
                 Gestión de Canchas
+
               </Dropdown.Item>
               <Dropdown.Item onClick={handleManagerDashboard}>
                 Dashboard Gerencia
+
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -122,7 +125,7 @@ const LayoutNav = () => {
       )}
       <CourtManagerModal show={showCourtModal} onClose={() => setShowCourtModal(false)} />
     </Navbar>
-    
+
   );
 };
 
