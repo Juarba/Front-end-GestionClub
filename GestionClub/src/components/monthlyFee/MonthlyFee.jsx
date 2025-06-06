@@ -65,30 +65,41 @@ const MonthlyFee = () => {
             return;
         }
 
-
         try {
-            const response = await fetch(
-                "https://localhost:7234/api/MonthlyFee",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({
-                        price: parseFloat(price),
-                        month: parseInt(month),
-                        year: parseInt(year),
-                    }),
-                }
-            );
+            const response = await fetch("https://localhost:7234/api/MonthlyFee", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    price: parseFloat(price),
+                    month: parseInt(month),
+                    year: parseInt(year),
+                }),
+            });
 
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(errorText);
             }
 
-            setToastMessage("Cuota creada con éxito.");
+            const newFeeId = await response.json();
+
+            // ✅ Asignar automáticamente a todos los usuarios
+            const assignResponse = await fetch(`https://localhost:7234/api/Payment/assign-all/${newFeeId}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!assignResponse.ok) {
+                const errorText = await assignResponse.text();
+                throw new Error(`Cuota creada pero no se pudo asignar a todos los usuarios: ${errorText}`);
+            }
+
+            setToastMessage("Cuota creada y asignada exitosamente.");
             setToastVariant("success");
             setShowToast(true);
             setShowModal(false);
@@ -96,14 +107,15 @@ const MonthlyFee = () => {
             setMonth("");
             setYear("");
             fetchMonthlyFees(); // refresca la tabla
+
         } catch (error) {
-            console.error("Error creating fee:", error);
-            setToastMessage("Error al crear la cuota.");
+            console.error("Error creando o asignando cuota:", error);
+            setToastMessage("Error al crear o asignar la cuota.");
             setToastVariant("danger");
             setShowToast(true);
-
         }
     };
+
 
     const handleUpdateFee = async () => {
         const token = localStorage.getItem("jwtToken");
