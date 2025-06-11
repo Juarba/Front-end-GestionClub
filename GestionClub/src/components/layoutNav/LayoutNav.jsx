@@ -53,10 +53,16 @@ const LayoutNav = () => {
   const handleManagerDashboard = () => {
     navigate("/managerDashboard")
   }
+
+  const handleAvailability = () => {
+    navigate("/disponibilidades");
+  };
+
   //MERCADOPAGO
   const handlePagoPage = () => {
     navigate("/pago");
   };
+  
   //Extrae el rol desde el token
   let userRole = null;
   const token = localStorage.getItem("jwtToken");
@@ -108,6 +114,9 @@ const LayoutNav = () => {
               <Dropdown.Item onClick={handleManagerDashboard}>
                 Dashboard Gerencia
 
+              </Dropdown.Item>
+              <Dropdown.Item onClick={handleAvailability}>
+                Gestion Disponibilidades
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
