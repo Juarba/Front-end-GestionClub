@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table, Spinner, Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import './MisCuotasPage.css';
 
 const MisCuotasPage = () => {
   const [cuotas, setCuotas] = useState([]);
@@ -12,11 +13,11 @@ const MisCuotasPage = () => {
     const titulo = `Cuota ${cuota.month}/${cuota.year}`;
     const precio = cuota.price;
     const cantidad = 1;
-    const cuotaId = cuota.monthlyFeeId; 
+    const cuotaId = cuota.monthlyFeeId;
     const userId = cuota.userId;
 
     navigate("/pago", {
-      state: { titulo, precio, cantidad, cuotaId: cuota.monthlyFeeId, userId: userId },
+      state: { titulo, precio, cantidad, cuotaId, userId },
     });
   };
 
@@ -25,18 +26,11 @@ const MisCuotasPage = () => {
       const token = localStorage.getItem("jwtToken");
 
       try {
-        const response = await fetch(
-          "https://localhost:7234/api/Payment/GetByCurrentUser",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch("https://localhost:7234/api/Payment/GetByCurrentUser", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-        if (!response.ok) {
-          throw new Error("Error al obtener las cuotas.");
-        }
+        if (!response.ok) throw new Error("Error al obtener las cuotas.");
 
         const data = await response.json();
         setCuotas(data);
@@ -52,22 +46,18 @@ const MisCuotasPage = () => {
 
   if (loading) {
     return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "70vh" }}
-      >
+      <div className="d-flex justify-content-center align-items-center" style={{ height: "70vh" }}>
         <Spinner animation="border" />
       </div>
     );
   }
 
   return (
-    <Container className="mt-5">
-      <h3 className="mb-4">Mis Cuotas</h3>
-
+    <Container className="miscuotas-container">
+      <h3 className="miscuotas-title">Mis Cuotas</h3>
       {error && <Alert variant="danger">{error}</Alert>}
 
-      <Table striped bordered hover>
+      <Table className="table-cuotas" responsive>
         <thead>
           <tr>
             <th>Mes</th>
@@ -86,13 +76,12 @@ const MisCuotasPage = () => {
                 <td>{cuota.year}</td>
                 <td>${cuota.price.toFixed(2)}</td>
                 <td>{new Date(cuota.dueDate).toLocaleDateString()}</td>
-                <td>{cuota.paid ? "Pagado" : "Pendiente"}</td>
+                <td className={cuota.paid ? "estado-pagado" : "estado-pendiente"}>
+                  {cuota.paid ? "Pagado" : "Pendiente"}
+                </td>
                 <td>
                   {!cuota.paid ? (
-                    <Button
-                      variant="success"
-                      onClick={() => handlePagar(cuota)}
-                    >
+                    <Button variant="success" onClick={() => handlePagar(cuota)}>
                       Pagar
                     </Button>
                   ) : (

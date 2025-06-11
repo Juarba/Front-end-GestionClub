@@ -17,7 +17,7 @@ const BookingPage = () => {
       const decoded = jwtDecode(token);
       userRole =
         decoded[
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ] ?? null;
     } catch (error) {
       console.error("Error decoding token:", error);
@@ -31,17 +31,17 @@ const BookingPage = () => {
   const [showManagerModal, setShowManagerModal] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
 
-
-
-
   const fetchData = async () => {
     try {
-      const response = await fetch(`https://localhost:7234/api/Booking/GetAllBookings`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://localhost:7234/api/Booking/GetAllBookings`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Error al cargar reservas");
@@ -58,19 +58,17 @@ const BookingPage = () => {
     fetchData();
   }, []);
 
-
-
-
-
   const filteredTurnos = availability
     .filter((turno) => dayjs(turno.startTime).isSame(selectedDate, "day"))
     .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 
-  const allCourts = [...new Set(filteredTurnos.map(t => t.courtId))].sort();
-  const allHours = [...new Set(filteredTurnos.map(t => dayjs(t.startTime).format("HH:mm")))].sort();
+  const allCourts = [...new Set(filteredTurnos.map((t) => t.courtId))].sort();
+  const allHours = [
+    ...new Set(filteredTurnos.map((t) => dayjs(t.startTime).format("HH:mm"))),
+  ].sort();
 
   const turnosPorHoraYCancha = {};
-  filteredTurnos.forEach(t => {
+  filteredTurnos.forEach((t) => {
     const hora = dayjs(t.startTime).format("HH:mm");
     if (!turnosPorHoraYCancha[hora]) turnosPorHoraYCancha[hora] = {};
     turnosPorHoraYCancha[hora][t.courtId] = t;
@@ -101,9 +99,7 @@ const BookingPage = () => {
 
       setAvailability((prev) =>
         prev.map((item) =>
-          item.id === selectedTurno.id
-            ? { ...item, available: false }
-            : item
+          item.id === selectedTurno.id ? { ...item, available: false } : item
         )
       );
 
@@ -132,14 +128,11 @@ const BookingPage = () => {
         throw new Error(errorData.error || "Error al cancelar");
       }
 
-
       alert("🗑️ ¡Reserva cancelada!");
 
       setAvailability((prev) =>
         prev.map((item) =>
-          item.id === selectedTurno.id
-            ? { ...item, available: true }
-            : item
+          item.id === selectedTurno.id ? { ...item, available: true } : item
         )
       );
 
@@ -150,7 +143,6 @@ const BookingPage = () => {
     }
   };
 
-
   return (
     <Container className="booking-container">
       <h2 className="booking-title">Elige tu turno</h2>
@@ -160,17 +152,29 @@ const BookingPage = () => {
             onChange={setSelectedDate}
             value={selectedDate}
             className="calendar"
-            tileClassName={({ date }) =>
-              dayjs(date).isSame(dayjs(), "day") ? "today-tile" : null
-            }
+            tileClassName={({ date, view }) => {
+              const isToday = dayjs(date).isSame(dayjs(), "day");
+              const isWeekend = [0, 6].includes(date.getDay()); // 0: Sunday, 6: Saturday
+              const isOtherMonth = date.getMonth() !== selectedDate.getMonth();
+
+              return [
+                isToday ? "today-tile" : "",
+                isOtherMonth ? "tile-other-month" : "",
+                isWeekend ? "tile-weekend" : "",
+              ].join(" ");
+            }}
           />
-          {showButton &&
+
+          {showButton && (
             <div className="mt-3 d-flex justify-content-start">
-              <Button variant="success" onClick={() => setShowManagerModal(true)}>
+              <Button
+                variant="success"
+                onClick={() => setShowManagerModal(true)}
+              >
                 Crear reservas
               </Button>
-            </div>}
-
+            </div>
+          )}
         </Col>
 
         <Col md={7}>
@@ -185,7 +189,9 @@ const BookingPage = () => {
                     <Col key={courtId}>
                       {turno ? (
                         <Card
-                          className={`turno-card ${!turno.available ? "disabled" : ""}`}
+                          className={`turno-card ${
+                            !turno.available ? "disabled" : ""
+                          }`}
                           onClick={() => handleSelectTurno(turno)}
                         >
                           <Card.Body>
@@ -195,14 +201,19 @@ const BookingPage = () => {
                             </Card.Title>
                             <Card.Text>
                               Cancha {turno.courtId} <br />
-                              Estado: <strong>{turno.available ? "Disponible" : "Ocupado"}</strong>
+                              Estado:{" "}
+                              <strong>
+                                {turno.available ? "Disponible" : "Ocupado"}
+                              </strong>
                             </Card.Text>
                           </Card.Body>
                         </Card>
                       ) : (
                         <Card className="turno-card disabled">
                           <Card.Body>
-                            <Card.Title className="turno-hora">{hora}</Card.Title>
+                            <Card.Title className="turno-hora">
+                              {hora}
+                            </Card.Title>
                             <Card.Text>
                               Cancha {courtId} <br />
                               <strong>Sin turno</strong>
@@ -221,18 +232,22 @@ const BookingPage = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>{isCancelling ? "Cancelar Reserva" : "Confirmar Reserva"}</Modal.Title>
+          <Modal.Title>
+            {isCancelling ? "Cancelar Reserva" : "Confirmar Reserva"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {isCancelling ? (
             <>
-              ¿Deseás <strong>cancelar</strong> la reserva de la cancha {selectedTurno?.courtId} de{" "}
+              ¿Deseás <strong>cancelar</strong> la reserva de la cancha{" "}
+              {selectedTurno?.courtId} de{" "}
               {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
               {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
             </>
           ) : (
             <>
-              ¿Deseás <strong>reservar</strong> la cancha {selectedTurno?.courtId} de{" "}
+              ¿Deseás <strong>reservar</strong> la cancha{" "}
+              {selectedTurno?.courtId} de{" "}
               {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
               {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
             </>
@@ -242,7 +257,10 @@ const BookingPage = () => {
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Cancelar
           </Button>
-          <Button variant="primary" onClick={isCancelling ? cancelBooking : confirmBooking}>
+          <Button
+            variant="primary"
+            onClick={isCancelling ? cancelBooking : confirmBooking}
+          >
             {isCancelling ? "Cancelar Reserva" : "Confirmar"}
           </Button>
         </Modal.Footer>
@@ -252,7 +270,6 @@ const BookingPage = () => {
         onFetch={fetchData}
         onClose={() => setShowManagerModal(false)}
       />
-
     </Container>
   );
 };

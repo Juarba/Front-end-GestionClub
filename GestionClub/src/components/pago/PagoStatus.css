@@ -1,0 +1,42 @@
+@keyframes pop-in {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pago-status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  background-color: var(--gray-50);
+}
+
+.status-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  animation: pop-in 0.6s ease-out;
+}
+
+.success-icon {
+  color: var(--success);
+}
+
+.status-message {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.success-text {
+  color: var(--court-green-dark);
+}

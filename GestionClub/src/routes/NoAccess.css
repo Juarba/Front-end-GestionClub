@@ -1,4 +1,4 @@
-/* src/index.css o src/routes/NoAccess.css */
+
 .no-access-container {
     text-align: center;
     padding: 20px;
@@ -7,9 +7,8 @@
 
 .no-access-container h1 {
     font-size: 2.5em;
-    color: #ff4d4d; /* Color rojo para el mensaje */
+    color: #ff4d4d; 
 }
-
 .no-access-container p {
     font-size: 1.2em;
     color: #666;

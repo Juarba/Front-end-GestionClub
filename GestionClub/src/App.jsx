@@ -73,11 +73,9 @@ function App() {
     {
       path: "/aboutUs",
       element: (
-        <PrivateRoute>
           <Layout>
             <AboutUs />
           </Layout>
-        </PrivateRoute>
       ),
     },
     {

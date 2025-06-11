@@ -1,0 +1,14 @@
+.dropzone {
+  border: 2px dashed var(--gray-500);
+  padding: 20px;
+  text-align: center;
+  background-color: var(--gray-100);
+  color: var(--gray-800);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+}
+
+.dropzone.active {
+  background-color: var(--gray-200);
+}

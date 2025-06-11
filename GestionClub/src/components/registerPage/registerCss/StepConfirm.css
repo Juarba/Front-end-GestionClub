@@ -1,21 +1,30 @@
-
 .card {
-    background: white;
-    border-radius: 16px;
-    padding: 2rem 3rem;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--gray-100);
+  border-radius: 16px;
+  padding: 2rem 3rem;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  color: var(--gray-800);
 }
 
 .card .icon {
-    width: 80px;
-    margin-bottom: 1rem;
+  width: 80px;
+  margin-bottom: 1rem;
 }
 
 .btn-acceder {
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    margin-top: 1rem;
-    cursor: pointer;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--court-green);
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--court-green-dark);
 }

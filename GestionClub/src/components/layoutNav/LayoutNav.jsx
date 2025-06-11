@@ -82,7 +82,7 @@ const LayoutNav = () => {
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto">
             <Nav.Link onClick={handleMainPage} className="nav-link-hover-green fw-bold text-success">INICIO</Nav.Link>
-            <Nav.Link onClick={handleNews} className="nav-link-hover-green">CLUB</Nav.Link>
+            <Nav.Link onClick={handleNews} className="nav-link-hover-green">NOTICIAS</Nav.Link>
             <Nav.Link onClick={handleAboutUs} className="nav-link-hover-green">CONTACTO</Nav.Link>
             <Nav.Link onClick={handleBookingPage} className="nav-link-hover-green">RESERVAR CANCHA</Nav.Link>
           </Nav>

@@ -8,16 +8,16 @@ import {
   Form,
   Toast,
   ToastContainer,
+  Alert,
 } from "react-bootstrap";
 import "./UserCenterPage.css";
 
 const getRoleName = (role) => {
-  const numericRole = parseInt(role);
-  switch (numericRole) {
+  switch (parseInt(role)) {
     case 0:
       return "Admin";
     case 1:
-      return "Client";
+      return "Cliente";
     case 2:
       return "Gerente";
     case 3:
@@ -39,32 +39,21 @@ const UserCenterPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
-
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(
-          "https://localhost:7234/api/User/GetAllUsers",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
+    fetch("https://localhost:7234/api/User/GetAllUsers", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Error: ${res.status}`);
+        return res.json();
+      })
+      .then((data) => setUsers(data))
+      .catch((err) => {
+        console.error("Error:", err);
+        setToastMessage("Error al cargar usuarios");
+        setToastVariant("danger");
+        setShowToast(true);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const handleEdit = (user) => {
@@ -78,87 +67,52 @@ const UserCenterPage = () => {
   };
 
   const handleSave = async () => {
-    if (!selectedUser) return;
-
     const token = localStorage.getItem("jwtToken");
-
     try {
-      const payload = {
-        Name: selectedUser.name,
-        Email: selectedUser.email,
-        PhoneNumber: selectedUser.phoneNumber,
-        Rol: parseInt(selectedUser.rol),
-        State: selectedUser.state,
-      };
+      const res = await fetch(`https://localhost:7234/api/User/UpdateUser/${selectedUser.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          Name: selectedUser.name,
+          Email: selectedUser.email,
+          PhoneNumber: selectedUser.phoneNumber,
+          Rol: parseInt(selectedUser.rol),
+          State: selectedUser.state,
+        }),
+      });
 
-      const response = await fetch(
-        `https://localhost:7234/api/User/UpdateUser/${selectedUser.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      if (!res.ok) throw new Error("Error al actualizar usuario");
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `Error: ${response.status}`);
-      }
-
-      const updatedUsers = users.map((user) =>
-        user.id === selectedUser.id ? selectedUser : user
-      );
-      setUsers(updatedUsers);
-
-      setToastMessage("Usuario actualizado con éxito.");
+      const updated = users.map((u) => (u.id === selectedUser.id ? selectedUser : u));
+      setUsers(updated);
+      setToastMessage("Usuario actualizado con éxito");
       setToastVariant("success");
       setShowToast(true);
       setShowModal(false);
-    } catch (error) {
-      console.error("Error updating user:", error);
-      setToastMessage(error.message || "Error actualizando usuario.");
+    } catch (err) {
+      setToastMessage(err.message);
       setToastVariant("danger");
       setShowToast(true);
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSelectedUser({ ...selectedUser, [name]: value });
-  };
-
   const handleRemoveUser = async () => {
-    if (!selectedUser) return;
-
     const token = localStorage.getItem("jwtToken");
-
     try {
-      const response = await fetch(
-        `https://localhost:7234/api/User/DeleteUser/${selectedUser.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const updatedUsers = users.filter((user) => user.id !== selectedUser.id);
-      setUsers(updatedUsers);
-
-      setToastMessage("Usuario eliminado con éxito.");
+      const res = await fetch(`https://localhost:7234/api/User/DeleteUser/${selectedUser.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Error al eliminar usuario");
+      setUsers(users.filter((u) => u.id !== selectedUser.id));
+      setToastMessage("Usuario eliminado con éxito");
       setToastVariant("success");
       setShowToast(true);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-      setToastMessage("Hubo un error al eliminar el usuario.");
+    } catch (err) {
+      setToastMessage("Hubo un error al eliminar el usuario");
       setToastVariant("danger");
       setShowToast(true);
     } finally {
@@ -167,23 +121,18 @@ const UserCenterPage = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "80vh" }}
-      >
-        <Spinner animation="border" />
-      </div>
-    );
-  }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedUser({ ...selectedUser, [name]: value });
+  };
 
   return (
-    <Container className="mt-5 container">
-      <br />
-      <h3 className="mb-4">Usuarios Registrados</h3>
+    <Container className="usercenter-container">
+      <h3 className="usercenter-title">Gestión de Usuarios</h3>
 
-      <Table striped bordered hover>
+      {loading && <div className="spinner-center"><Spinner animation="border" /></div>}
+
+      <Table className="user-table" responsive>
         <thead>
           <tr>
             <th>Nombre</th>
@@ -196,22 +145,18 @@ const UserCenterPage = () => {
         </thead>
         <tbody>
           {users.length > 0 ? (
-            users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{getRoleName(user.rol)}</td>
-                <td>{user.email}</td>
-                <td>{user.phoneNumber}</td>
-                <td>{user.state ? "Activo" : "Inactivo"}</td>
+            users.map((u) => (
+              <tr key={u.id}>
+                <td>{u.name}</td>
+                <td>{getRoleName(u.rol)}</td>
+                <td>{u.email}</td>
+                <td>{u.phoneNumber}</td>
+                <td>{u.state ? "Activo" : "Inactivo"}</td>
                 <td>
-                  <Button
-                    variant="warning"
-                    className="me-2"
-                    onClick={() => handleEdit(user)}
-                  >
+                  <Button variant="warning" className="me-2" onClick={() => handleEdit(u)}>
                     Editar
                   </Button>
-                  <Button variant="danger" onClick={() => handleDelete(user)}>
+                  <Button variant="danger" onClick={() => handleDelete(u)}>
                     Eliminar
                   </Button>
                 </td>
@@ -219,122 +164,66 @@ const UserCenterPage = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="text-center">
-                No se encontraron usuarios.
-              </td>
+              <td colSpan="6" className="text-center">No hay usuarios registrados.</td>
             </tr>
           )}
         </tbody>
       </Table>
 
-      {/* Modal de Edición */}
+      {/* Modales y Toast */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Editar Usuario</Modal.Title>
-        </Modal.Header>
+        <Modal.Header closeButton><Modal.Title>Editar Usuario</Modal.Title></Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Nombre</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                value={selectedUser?.name || ""}
-                onChange={handleChange}
-              />
+              <Form.Control name="name" value={selectedUser?.name || ""} onChange={handleChange} />
             </Form.Group>
-
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                value={selectedUser?.email || ""}
-                onChange={handleChange}
-              />
+              <Form.Control name="email" value={selectedUser?.email || ""} onChange={handleChange} />
             </Form.Group>
-
             <Form.Group className="mb-3">
               <Form.Label>Teléfono</Form.Label>
-              <Form.Control
-                type="text"
-                name="phoneNumber"
-                value={selectedUser?.phoneNumber || ""}
-                onChange={handleChange}
-              />
+              <Form.Control name="phoneNumber" value={selectedUser?.phoneNumber || ""} onChange={handleChange} />
             </Form.Group>
-
             <Form.Group className="mb-3">
               <Form.Label>Rol</Form.Label>
-              <Form.Select
-                name="rol"
-                value={selectedUser?.rol || ""}
-                onChange={handleChange}
-              >
-                <option value="">Seleccionar rol</option>
+              <Form.Select name="rol" value={selectedUser?.rol || ""} onChange={handleChange}>
+                <option value="">Seleccionar</option>
                 <option value="0">Admin</option>
                 <option value="1">Cliente</option>
+                <option value="2">Gerente</option>
+                <option value="3">CM</option>
               </Form.Select>
             </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Check
-                type="switch"
-                id="estado-switch"
-                label="Activo"
-                name="state"
-                checked={selectedUser?.state || false}
-                onChange={(e) =>
-                  setSelectedUser({ ...selectedUser, state: e.target.checked })
-                }
-              />
-            </Form.Group>
+            <Form.Check
+              type="switch"
+              label="Activo"
+              name="state"
+              checked={selectedUser?.state || false}
+              onChange={(e) => setSelectedUser({ ...selectedUser, state: e.target.checked })}
+            />
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cancelar
-          </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Guardar
-          </Button>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+          <Button variant="primary" onClick={handleSave}>Guardar</Button>
         </Modal.Footer>
       </Modal>
 
-      {/* Modal de Confirmación de Eliminación */}
       <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmar Eliminación</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          ¿Estás seguro que deseas eliminar el usuario{" "}
-          <strong>{selectedUser?.name}</strong>?
-        </Modal.Body>
+        <Modal.Header closeButton><Modal.Title>Confirmar Eliminación</Modal.Title></Modal.Header>
+        <Modal.Body>¿Seguro que deseas eliminar a <strong>{selectedUser?.name}</strong>?</Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setShowConfirmModal(false)}
-          >
-            Cancelar
-          </Button>
-          <Button variant="danger" onClick={handleRemoveUser}>
-            Sí, eliminar
-          </Button>
+          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>Cancelar</Button>
+          <Button variant="danger" onClick={handleRemoveUser}>Eliminar</Button>
         </Modal.Footer>
       </Modal>
 
-      {/* Toast de Notificación */}
       <ToastContainer position="top-end" className="p-3">
-        <Toast
-          show={showToast}
-          bg={toastVariant} //
-          autohide
-          delay={3000}
-          onClose={() => setShowToast(false)}
-        >
-          <Toast.Header>
-            <strong className="me-auto">Notificación</strong>
-          </Toast.Header>
+        <Toast show={showToast} bg={toastVariant} autohide delay={3000} onClose={() => setShowToast(false)}>
+          <Toast.Header><strong className="me-auto">Notificación</strong></Toast.Header>
           <Toast.Body>{toastMessage}</Toast.Body>
         </Toast>
       </ToastContainer>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Toast, ToastContainer, Spinner } from "react-bootstrap";
+import './CourtManagerModal.css';
 
 const CourtManagerModal = ({ show, onClose }) => {
     const [courts, setCourts] = useState([]);

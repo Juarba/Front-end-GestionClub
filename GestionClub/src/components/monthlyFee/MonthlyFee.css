@@ -1,0 +1,117 @@
+.monthlyfee-container {
+  background-color: var(--gray-100);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  max-width: 1000px;
+  margin: 2rem auto;
+  color: var(--gray-900);
+}
+
+.monthlyfee-title {
+  color: var(--primary-blue);
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.monthlyfee-table {
+  background-color: var(--gray-200);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.monthlyfee-table thead {
+  background-color: var(--gray-300);
+  color: var(--gray-900);
+}
+
+.monthlyfee-table thead th {
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--gray-400);
+}
+
+.monthlyfee-table tbody td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--gray-300);
+  vertical-align: middle;
+}
+
+.monthlyfee-table tbody tr:hover {
+  background-color: var(--gray-100);
+}
+
+/* Botones */
+.btn-primary {
+  background-color: var(--court-green);
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--court-green-dark);
+}
+
+.btn-warning {
+  background-color: var(--gray-500);
+  border: none;
+  color: black;
+}
+
+.btn-warning:hover {
+  background-color: var(--gray-400);
+}
+
+.btn-danger {
+  background-color: var(--error);
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: var(--error-dark);
+}
+
+/* Modal */
+.modal-content {
+  background-color: var(--gray-100);
+  color: var(--gray-900);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--gray-300);
+}
+
+.modal-title {
+  color: var(--primary-blue);
+  font-weight: bold;
+}
+
+.form-control{
+    background-color: var(--gray-50);
+    color: var(--gray-900);
+}
+
+.form-control:hover{
+    background-color: var(--gray-200);
+}
+
+.form-control:active{
+    background-color: var(--gray-200);
+}
+
+.form-control:focus{
+    background-color: var(--gray-200);
+    color: var(--gray-900);
+}
+/* Toast */
+.toast-success {
+  background-color: var(--court-green-dark);
+}
+
+.toast-danger {
+  background-color: var(--error-dark);
+}
+
+.toast-warning {
+  background-color: var(--warning-dark);
+}

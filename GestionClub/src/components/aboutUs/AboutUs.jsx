@@ -44,8 +44,8 @@ const AboutUs = () => {
     };
 
   return (
-  <Container className="mt-5">
-    <Row className="justify-content-center">
+  <Container className="mt-5 container-bg mb-5">
+    <Row className="justify-content-center align-items-center">
       <Col md={8}>
         <div className="contact-container">
           <h2 className="contact-title">Contacto</h2>
