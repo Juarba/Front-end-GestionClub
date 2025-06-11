@@ -1,34 +1,32 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { Modal, Form, Button, Alert } from "react-bootstrap";
 import { useDropzone } from "react-dropzone";
 import { API_URL } from "../../services/api";
+import './NewsCreate.css';
 
 const NewsCreate = ({ show, onClose, onNewsCreated, showToast }) => {
- const now = new Date();
-const [formData, setFormData] = useState({
-  title: "",
-  description: "",
-  imageUrl: "",
-  date: now.toISOString(), // para enviar al backend
-  dateInput: now.toISOString().split("T")[0], // para mostrar en el input
-});
-
-const resetForm = () => {
   const now = new Date();
-  setFormData({
+  const [formData, setFormData] = useState({
     title: "",
     description: "",
     imageUrl: "",
     date: now.toISOString(),
     dateInput: now.toISOString().split("T")[0],
   });
-};
-
 
   const [errorMessage, setErrorMessage] = useState("");
   const [uploading, setUploading] = useState(false);
 
-  
+  const resetForm = () => {
+    const now = new Date();
+    setFormData({
+      title: "",
+      description: "",
+      imageUrl: "",
+      date: now.toISOString(),
+      dateInput: now.toISOString().split("T")[0],
+    });
+  };
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -78,6 +76,7 @@ const resetForm = () => {
       });
 
       if (!response.ok) throw new Error("Error al crear la noticia");
+
       showToast("Noticia creada correctamente.");
       resetForm();
       onClose();
@@ -96,45 +95,54 @@ const resetForm = () => {
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Label>Título</Form.Label>
-            <Form.Control type="text" name="title" value={formData.title} onChange={handleChange} required />
+            <Form.Control
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              required
+              placeholder="Título de la noticia"
+            />
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Descripción</Form.Label>
-            <Form.Control as="textarea" rows={3} name="description" value={formData.description} onChange={handleChange} required />
+            <Form.Control
+              as="textarea"
+              rows={3}
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              placeholder="Escriba aquí la descripción..."
+            />
           </Form.Group>
 
           <Form.Group className="mb-3">
-  <Form.Label>Fecha</Form.Label>
-  <Form.Control
-    type="date"
-    name="dateInput"
-    value={formData.dateInput || ""}
-    onChange={(e) => {
-      const selectedDate = e.target.value;
-      const now = new Date();
-      const [hour, minute, second] = now
-        .toTimeString()
-        .split(" ")[0]
-        .split(":");
-
-      const fullDate = new Date(`${selectedDate}T${hour}:${minute}:${second}`);
-
-      setFormData((prev) => ({
-        ...prev,
-        dateInput: selectedDate,
-        date: fullDate.toISOString(), // mantiene hora actual
-      }));
-    }}
-    required
-  />
-</Form.Group>
+            <Form.Label>Fecha</Form.Label>
+            <Form.Control
+              type="date"
+              name="dateInput"
+              value={formData.dateInput}
+              onChange={(e) => {
+                const selectedDate = e.target.value;
+                const [hour, minute, second] = new Date().toTimeString().split(" ")[0].split(":");
+                const fullDate = new Date(`${selectedDate}T${hour}:${minute}:${second}`);
+                setFormData((prev) => ({
+                  ...prev,
+                  dateInput: selectedDate,
+                  date: fullDate.toISOString(),
+                }));
+              }}
+              required
+            />
+          </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Imagen</Form.Label>
             <div
               {...getRootProps()}
-              style={{ border: "2px dashed #aaa", padding: "20px", textAlign: "center", backgroundColor: isDragActive ? "#eee" : "#fff" }}
+              className={`dropzone ${isDragActive ? "active" : ""}`}
             >
               <input {...getInputProps()} />
               {uploading
@@ -145,11 +153,21 @@ const resetForm = () => {
             </div>
           </Form.Group>
 
-          <Button variant="primary" type="submit" disabled={uploading}>
+          <Button
+            variant="success"
+            type="submit"
+            disabled={uploading}
+            className="mt-2"
+          >
             Crear Noticia
           </Button>
         </Form>
-        {errorMessage && <Alert className="mt-3" variant="danger">{errorMessage}</Alert>}
+
+        {errorMessage && (
+          <Alert className="mt-3" variant="danger">
+            {errorMessage}
+          </Alert>
+        )}
       </Modal.Body>
     </Modal>
   );

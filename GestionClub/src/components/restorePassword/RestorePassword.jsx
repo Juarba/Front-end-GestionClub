@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import "../resetPassword/ResetPassword.css";
 
 const RestorePassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -17,24 +18,27 @@ const RestorePassword = () => {
       return;
     }
 
-    setError(""); 
+    setError("");
 
-    const res = await fetch("https://localhost:7234/api/RecoverPassword/reset-password", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token, newPassword }),
-    });
+    try {
+      const res = await fetch("https://localhost:7234/api/RecoverPassword/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, newPassword }),
+      });
 
-    const text = await res.text();
-    setMessage(text);
+      const text = await res.text();
+      setMessage(text);
+    } catch (err) {
+      setError("Ocurrió un error al cambiar la contraseña.");
+    }
   };
 
   return (
     <div className="reset-pass-container">
       <div className="reset-pass-form-container">
-        <div>
-          <h2 className="mb-4 text-center">Cambiar contraseña</h2>
-        </div>
+        <h2 className="mb-4 text-center text-primary">Restablecer Contraseña</h2>
+
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Control
@@ -61,11 +65,12 @@ const RestorePassword = () => {
           </Form.Group>
 
           <Button type="submit" variant="primary" className="w-100 mb-3">
-            Restablecer Contraseña
+            Cambiar Contraseña
           </Button>
         </Form>
-        {error && <p className="text-danger">{error}</p>}
-        {message && <p>{message}</p>}
+
+        {error && <p className="text-danger text-center">{error}</p>}
+        {message && <p className="text-success text-center">{message}</p>}
       </div>
     </div>
   );

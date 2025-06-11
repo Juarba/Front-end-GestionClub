@@ -3,7 +3,7 @@ import { Container, Toast, ToastContainer, Button } from "react-bootstrap";
 import NewsList from "./NewsList";
 import NewsCreate from "./NewsCreate";
 import { jwtDecode } from "jwt-decode";
-import './NewsDashboard.css'
+import './NewsDashboard.css';
 
 const NewsDashboard = () => {
   const [showModal, setShowModal] = useState(false);
@@ -38,10 +38,10 @@ const NewsDashboard = () => {
   };
 
   return (
-    <Container style={{ marginTop: "80px" }}>
-      <h1 className="my-4">Noticias del Club</h1>
+    <Container className="news-dashboard-container">
+      <h1 className="dashboard-title">Noticias del Club</h1>
       {puedeCrearNoticia && (
-        <Button variant="primary" className="mb-3" onClick={() => setShowModal(true)}>
+        <Button variant="success" className="mb-3" onClick={() => setShowModal(true)}>
           Crear Noticia
         </Button>
       )}
@@ -52,16 +52,11 @@ const NewsDashboard = () => {
         onNewsCreated={handleNewsCreated}
         showToast={triggerToast}
       />
-      <ToastContainer
-  className="toast-center"
-  position="top-center"
-  style={{ zIndex: 9999 }}
->
-  <Toast show={showToast} bg="success" onClose={() => setShowToast(false)} delay={4000} autohide>
-    <Toast.Body className="text-white">{toastMessage}</Toast.Body>
-  </Toast>
-</ToastContainer>
-
+      <ToastContainer className="toast-center" position="top-center">
+        <Toast show={showToast} bg="success" onClose={() => setShowToast(false)} delay={4000} autohide>
+          <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </Container>
   );
 };

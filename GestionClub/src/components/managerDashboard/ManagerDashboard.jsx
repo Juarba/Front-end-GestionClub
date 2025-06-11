@@ -114,7 +114,7 @@ const ManagerDashboard = () => {
           { month: "long" }
         )}`,
         data: dataPorDia,
-        backgroundColor: "rgba(75, 192, 192, 0.88)",
+        backgroundColor: "rgba(76, 175, 80, 0.9)",
       },
     ],
   };
@@ -262,7 +262,7 @@ const ManagerDashboard = () => {
               <Card className="dashboard-card">
                 <Card.Body>
                   <h5 className="mb-3">Reservas del mes</h5>
-                  <Table className="table-dark-custom" hover responsive>
+                  <Table className="table-dashboard" hover responsive bsPrefix="custom-table">
                     <thead>
                       <tr>
                         <th>Fecha</th>
@@ -289,7 +289,7 @@ const ManagerDashboard = () => {
                   </Table>
                   <div className="d-flex justify-content-between mt-3">
                     <Button
-                      variant="secondary"
+                      variant="success"
                       onClick={() =>
                         setPaginaActual((prev) => Math.max(prev - 1, 1))
                       }
@@ -301,7 +301,7 @@ const ManagerDashboard = () => {
                       Página {paginaActual} de {totalPaginas}
                     </span>
                     <Button
-                      variant="secondary"
+                      variant="success"
                       onClick={() =>
                         setPaginaActual((prev) =>
                           Math.min(prev + 1, totalPaginas)

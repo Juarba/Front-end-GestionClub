@@ -8,7 +8,7 @@ import {
     Form,
 } from "react-bootstrap";
 
-
+import './BookingModal.css';
 
 const BookingManagerModal = ({ show, onClose, onFetch }) => {
     const [startDate, setStartDate] = useState("");

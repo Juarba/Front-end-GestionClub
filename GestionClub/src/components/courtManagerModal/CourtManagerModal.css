@@ -1,0 +1,64 @@
+/* Modal general */
+.modal-content {
+  background-color: var(--gray-100);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-lg);
+  color: var(--gray-800);
+}
+
+/* Título del modal */
+.modal-title {
+  color: var(--primary-blue);
+  font-weight: bold;
+}
+
+/* Lista de canchas */
+.list-group-item {
+  background-color: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--gray-800);
+  font-weight: 500;
+}
+
+/* Botón eliminar */
+.btn-outline-danger {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--error);
+  color: white;
+}
+
+/* Botón crear nueva cancha */
+.btn-success {
+  background-color: var(--court-green);
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: var(--court-green-dark);
+}
+
+/* Toast */
+.toast-success {
+  background-color: var(--court-green);
+  color: white;
+}
+
+.toast-danger {
+  background-color: var(--error);
+  color: white;
+}
+
+.toast .toast-header {
+  background-color: var(--gray-800);
+  color: white;
+}
+
+.toast .toast-body {
+  color: white;
+}

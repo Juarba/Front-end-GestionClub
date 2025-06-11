@@ -45,7 +45,8 @@ const LoginPage = () => {
     <div className="login-container">
       <div className="login-form-container">
         <div className="logo-container">
-          <img src="/logo.png" alt="Logo" className="logo-image" />
+         <img src="/images/LogoSinFondo.png" alt="Logo" className="logo-image" />
+
         </div>
 
         <div className="login-toggle">

@@ -1,8 +1,12 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import { CheckCircleFill } from "react-bootstrap-icons";
+import "./PagoStatus.css";
 
 const SuccessPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -44,7 +48,15 @@ const SuccessPage = () => {
     }
   }, [location]);
 
-  return <h2>Pago realizado con éxito ✅</h2>;
+  return (
+    <div className="pago-status-container">
+      <CheckCircleFill className="status-icon success-icon" />
+      <h2 className="status-message success-text">Pago realizado con éxito</h2>
+      <Button className="mt-4" variant="success" onClick={() => navigate("/mis-cuotas")}>
+        Volver a Mis Cuotas
+      </Button>
+    </div>
+  );
 };
 
 export default SuccessPage;

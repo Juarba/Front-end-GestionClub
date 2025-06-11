@@ -7,6 +7,8 @@ import {
   ToastContainer,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import "./UserDropdown.css";
+
 
 const UserDropdown = ({ logout }) => {
   const navigate = useNavigate();

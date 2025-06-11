@@ -1,0 +1,30 @@
+.news-card {
+  margin-bottom: 1.5rem;
+  width: 100%;
+  position: relative;
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-300);
+}
+
+.news-image {
+  height: 300px;
+  object-fit: cover;
+}
+
+.news-date-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: var(--primary-blue);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  opacity: 0.85;
+  z-index: 1;
+}
+
+.news-title {
+  color: var(--primary-blue);
+  font-weight: bold;
+}

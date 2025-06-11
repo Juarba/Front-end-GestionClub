@@ -1,20 +1,21 @@
 .login-container {
   min-height: 100vh;
-  background-image: url("/public/images/background1.jpg");
+
   background-size: cover;
-  background-position: center;  
+  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .login-form-container {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--gray-700); 
   width: 100%;
   max-width: 400px;
   padding: 1.5rem;
   border-radius: 0.75rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg);
+  color: var(--gray-50); 
 }
 
 .logo-container {
@@ -23,7 +24,7 @@
 }
 
 .logo-image {
-  height: 60px;
+  height: 100px;
 }
 
 .login-toggle {
@@ -32,13 +33,48 @@
   margin-bottom: 1rem;
   border-radius: 50px;
   overflow: hidden;
-  border: 1px solid #dee2e6;
-  background-color: #e9ecef;
+  border: 1px solid var(--gray-500);
+  background-color: var(--gray-600);
 }
 
 .login-toggle-button {
   border-radius: 0;
   width: 50%;
+  color: white;
+  font-weight: 500;
+}
+
+.login-toggle-button.btn-dark {
+  background-color: var(--gray-800);
+}
+
+.login-toggle-button.btn-success {
+  background-color: var(--court-green);
+}
+
+.login-toggle-button.btn-success:hover {
+  background-color: var(--court-green-dark);
+}
+
+
+.form-label {
+  color: var(--gray-200); 
+}
+
+.form-control {
+  background-color: var(--gray-800);
+  border: 1px solid var(--gray-500);
+  color: var(--gray-50);
+}
+
+.form-control::placeholder {
+  color: var(--gray-300);
+
+}
+.form-control:focus {
+  border-color: var(--primary-blue-light);
+  background-color: var(--gray-800);
+  color: var(--gray-50);
 }
 
 .forgot-password {
@@ -47,7 +83,45 @@
   font-size: 0.9rem;
 }
 
+.forgot-password a {
+  color: var(--primary-blue-light);
+  text-decoration: none;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+
+.text-success {
+  color: var(--court-green);
+}
+
+.text-danger {
+  color: var(--error);
+}
+
+
 .register-prompt {
   text-align: center;
   margin-top: 1rem;
+}
+
+.register-prompt a {
+  color: var(--primary-blue-light);
+  text-decoration: none;
+}
+
+.register-prompt a:hover {
+  text-decoration: underline;
+}
+
+
+button[type="submit"].btn-dark {
+  background-color: var(--court-green);
+  border: none;
+}
+
+button[type="submit"].btn-dark:hover {
+  background-color: var(--court-green-dark);
 }
