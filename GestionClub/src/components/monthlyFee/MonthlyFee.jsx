@@ -238,14 +238,14 @@ const MonthlyFee = () => {
                 <td>${monthlyFee.price.toFixed(2)}</td>
                 <td>
                   <Button
-                    variant="warning"
+                    variant="outline-secondary"
                     className="me-2"
                     onClick={() => handleEdit(monthlyFee)}
                   >
-                    Editar
+                    <i class="bi bi-pencil-square"></i> Editar
                   </Button>
-                  <Button variant="danger" onClick={() => handleDelete(monthlyFee)}>
-                    Eliminar
+                  <Button variant="outline-danger" onClick={() => handleDelete(monthlyFee)}>
+                    <i className="bi bi-trash" /> Eliminar
                   </Button>
                 </td>
               </tr>

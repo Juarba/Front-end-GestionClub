@@ -153,11 +153,11 @@ const UserCenterPage = () => {
                 <td>{u.phoneNumber}</td>
                 <td>{u.state ? "Activo" : "Inactivo"}</td>
                 <td>
-                  <Button variant="warning" className="me-2" onClick={() => handleEdit(u)}>
-                    Editar
+                  <Button variant="outline-secondary" className="me-2" onClick={() => handleEdit(u)}>
+                    <i class="bi bi-pencil-square"></i> Editar
                   </Button>
-                  <Button variant="danger" onClick={() => handleDelete(u)}>
-                    Eliminar
+                  <Button variant="outline-danger" onClick={() => handleDelete(u)}>
+                    <i className="bi bi-trash" /> Eliminar
                   </Button>
                 </td>
               </tr>
