@@ -11,10 +11,6 @@ const Footer = () => {
     navigate("/");
   };
 
-  const handleServicePage = () => {
-    navigate("/servicePage")
-  }
-
   const handleNews = () => {
     navigate("/news")
   }
@@ -44,7 +40,6 @@ const Footer = () => {
             <h5 className="text-success fw-bold">Gestion Club</h5>
             <ul className="list-unstyled">
               <li onClick={handleMainPage}><FaChevronRight className="me-2" />Inicio</li>
-              <li onClick={handleServicePage}><FaChevronRight className="me-2" />Servicios</li>
               <li onClick={handleNews}><FaChevronRight className="me-2" />Club</li>
               <li onClick={handleBookingPage}><FaChevronRight className="me-2" />Actividades</li>
               <li onClick={handleAboutUs}><FaChevronRight className="me-2" />Contacto</li>

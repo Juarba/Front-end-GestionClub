@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Modal, Button, Card } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button, Card, ToastContainer, Toast } from "react-bootstrap";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./BookingPage.css";
@@ -30,6 +30,9 @@ const BookingPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [showManagerModal, setShowManagerModal] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastVariant, setToastVariant] = useState("success");
 
   const fetchData = async () => {
     try {
@@ -48,7 +51,13 @@ const BookingPage = () => {
       }
 
       const data = await response.json();
-      setAvailability(data);
+      const ahora = dayjs();
+
+      const reservasFuturas = data.filter(
+      (reserva) => dayjs(reserva.startTime).isAfter(ahora)
+    );
+
+      setAvailability(reservasFuturas);
     } catch (error) {
       console.error("Error al obtener las reservas:", error);
     }
@@ -95,7 +104,9 @@ const BookingPage = () => {
 
       if (!response.ok) throw new Error("Error al confirmar");
 
-      alert("✅ ¡Reserva confirmada!");
+      setToastMessage("Reserva realizada con exito");
+      setToastVariant("success");
+      setShowToast(true);
 
       setAvailability((prev) =>
         prev.map((item) =>
@@ -106,7 +117,9 @@ const BookingPage = () => {
       setShowModal(false);
       setSelectedTurno(null);
     } catch (err) {
-      alert("❌ No se pudo confirmar la reserva");
+      setToastMessage(err.message);
+      setToastVariant("danger");
+      setShowToast(true);
     }
   };
 
@@ -128,7 +141,9 @@ const BookingPage = () => {
         throw new Error(errorData.error || "Error al cancelar");
       }
 
-      alert("🗑️ ¡Reserva cancelada!");
+      setToastMessage("Reserva cancelada con exito");
+      setToastVariant("success");
+      setShowToast(true);
 
       setAvailability((prev) =>
         prev.map((item) =>
@@ -139,7 +154,9 @@ const BookingPage = () => {
       setShowModal(false);
       setSelectedTurno(null);
     } catch (err) {
-      alert(`${err.message}`);
+      setToastMessage(err.message);
+      setToastVariant("danger");
+      setShowToast(true);
     }
   };
 
@@ -270,6 +287,21 @@ const BookingPage = () => {
         onFetch={fetchData}
         onClose={() => setShowManagerModal(false)}
       />
+
+      <ToastContainer  position="top-end" className="p-3">
+        <Toast
+          show={showToast}
+          bg={toastVariant}
+          autohide
+          delay={3000}
+          onClose={() => setShowToast(false)}
+        >
+          <Toast.Header>
+            <strong className="me-auto">Notificación</strong>
+          </Toast.Header>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </Container>
   );
 };

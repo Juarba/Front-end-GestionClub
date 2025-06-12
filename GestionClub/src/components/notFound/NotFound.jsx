@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import './NotFound.css';
-import notfound from "../../assets/NotFound.jpg";
+import notfound from "../../../public/images/notfoundsinfondo.png";
 
 const NotFound = () => {
     const navigate = useNavigate();
