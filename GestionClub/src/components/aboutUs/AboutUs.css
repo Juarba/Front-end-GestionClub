@@ -43,6 +43,6 @@
 
 
 .custom-placeholder::placeholder {
-  color: #6c757d; /* gris Bootstrap, podés cambiarlo */
-  opacity: 1; /* opcional, para que no se vea desvanecido */
+  color: #6c757d;
+  opacity: 1;
 }
