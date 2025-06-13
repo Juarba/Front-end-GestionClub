@@ -15,9 +15,24 @@ const NewsList = ({ refresh }) => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastVariant, setToastVariant] = useState("success");
-  const token = localStorage.getItem("jwtToken");
-  const decoded = jwtDecode(token);
-  console.log(decoded)
+
+
+    const token = localStorage.getItem("jwtToken");
+    const tokenDecoded = jwtDecode(token);
+    //Extrae el rol desde el token
+    let userRole = null;
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        userRole =
+          decoded[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          ] ?? null;
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+
 
   const fetchNews = async () => {
     const token = localStorage.getItem("jwtToken");
@@ -104,7 +119,9 @@ const NewsList = ({ refresh }) => {
           <Card.Body>
             <Card.Title className="news-title">{item.title}</Card.Title>
             <Card.Text>{item.description}</Card.Text>
-            <Button variant="danger" onClick={() => {setSelectedItem(item);setShowModal(true);}}>Eliminar</Button>
+            {userRole === "CM" || userRole === "Admin"  && (
+              <Button variant="danger" onClick={() => {setSelectedItem(item);setShowModal(true);}}>Eliminar</Button>
+            )}
           </Card.Body>
         </Card>
       ))}
