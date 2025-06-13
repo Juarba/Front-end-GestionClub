@@ -28,6 +28,7 @@ import FailurePage from "./components/pago/FailurePage";
 import PendingPage from "./components/pago/PendingPage";
 import MisCuotasPage from "./components/cuotas/MisCuotasPage";
 import MonthlyFee from "./components/monthlyFee/MonthlyFee";
+import Availability from "./components/availabilityPage/Availability";
 function App() {
   const router = createBrowserRouter([
     {
@@ -198,6 +199,16 @@ function App() {
         <Layout>
           <MisCuotasPage />
         </Layout>
+      ),
+    },
+    {
+      path: "/disponibilidades",
+      element: (
+        <PrivateRoute>
+          <Layout>
+            <Availability/>
+          </Layout>
+        </PrivateRoute>
       ),
     },
   ]);

@@ -64,6 +64,7 @@ const AboutUs = () => {
                 value={formData.user_name}
                 onChange={handleChange}
                 placeholder="Ingresa su nombre"
+                className="custom-placeholder"
                 required
               />
             </Form.Group>
@@ -76,6 +77,7 @@ const AboutUs = () => {
                 value={formData.reason}
                 onChange={handleChange}
                 placeholder="Ejemplo: 'No me deja alquilar una cancha' "
+                className="custom-placeholder"
                 required
               />
             </Form.Group>
@@ -88,6 +90,7 @@ const AboutUs = () => {
                 value={formData.user_email}
                 onChange={handleChange}
                 placeholder="Ingrese su correo electronico"
+                className="custom-placeholder"
                 required
               />
             </Form.Group>
@@ -101,6 +104,7 @@ const AboutUs = () => {
                 value={formData.message}
                 onChange={handleChange}
                 placeholder="Ingrese su consulta..."
+                className="custom-placeholder"
                 required
               />
             </Form.Group>
