@@ -104,7 +104,7 @@ const NewsList = ({ refresh }) => {
           <Card.Body>
             <Card.Title className="news-title">{item.title}</Card.Title>
             <Card.Text>{item.description}</Card.Text>
-            {} 
+            <Button variant="danger" onClick={() => {setSelectedItem(item);setShowModal(true);}}>Eliminar</Button>
           </Card.Body>
         </Card>
       ))}
