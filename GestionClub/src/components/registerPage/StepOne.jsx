@@ -103,6 +103,7 @@ const StepOne = ({ formData, setFormData, onNext }) => {
             placeholder="Nombre"
             value={formData.name}
             onChange={handleChange}
+            className='custom-placeholder'
           />
         </Form.Group>
 
@@ -114,6 +115,7 @@ const StepOne = ({ formData, setFormData, onNext }) => {
             value={formData.email}
             onChange={handleChange}
             isInvalid={emailExists}
+            className='custom-placeholder'
           />
           {emailExists && (
             <Form.Text className="text-danger">
@@ -129,6 +131,7 @@ const StepOne = ({ formData, setFormData, onNext }) => {
             placeholder="Contraseña"
             value={formData.password}
             onChange={handleChange}
+            className='custom-placeholder'
           />
         </Form.Group>
 
@@ -139,6 +142,7 @@ const StepOne = ({ formData, setFormData, onNext }) => {
             placeholder="Repetir contraseña"
             value={formData.repeatPassword}
             onChange={handleChange}
+            className='custom-placeholder'
           />
         </Form.Group>
 
@@ -149,6 +153,7 @@ const StepOne = ({ formData, setFormData, onNext }) => {
             placeholder="N° de teléfono"
             value={formData.phoneNumber}
             onChange={handleChange}
+            className='custom-placeholder'
           />
         </Form.Group>
 

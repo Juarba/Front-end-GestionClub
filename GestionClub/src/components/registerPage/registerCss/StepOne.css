@@ -72,3 +72,9 @@
 .login-prompt a:hover {
   text-decoration: underline;
 }
+
+
+.custom-placeholder::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}

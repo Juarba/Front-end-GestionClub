@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Card, Spinner, Alert, Container } from "react-bootstrap";
+import { Card, Spinner, Alert, Container,Button,Modal,Toast} from "react-bootstrap";
 import { API_URL } from "../../services/api";
+import { jwtDecode } from "jwt-decode";
+
 import './NewsList.css';
 
 const NewsList = ({ refresh }) => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastVariant, setToastVariant] = useState("success");
+  const token = localStorage.getItem("jwtToken");
+  const decoded = jwtDecode(token);
+  console.log(decoded)
 
   const fetchNews = async () => {
     const token = localStorage.getItem("jwtToken");
@@ -17,9 +28,11 @@ const NewsList = ({ refresh }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (!response.ok) throw new Error("Error al cargar noticias");
       const data = await response.json();
       setNews(data.sort((a, b) => new Date(b.date) - new Date(a.date)));
+
     } catch (err) {
       setError(err.message);
     } finally {
@@ -27,17 +40,49 @@ const NewsList = ({ refresh }) => {
     }
   };
 
+  console.log(news)
   useEffect(() => {
     fetchNews();
   }, [refresh]);
 
+  const handleDelete = async (item) => {
+  const token = localStorage.getItem("jwtToken");
+  setShowModal(false); // cierra el modal
+
+  try {
+    const response = await fetch(`${API_URL}/News/Delete/${item.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) throw new Error("No se pudo eliminar la noticia");
+
+    setNews((prev) => prev.filter((n) => n.id !== item.id));
+    setToastVariant("success");
+    setToastMessage("Noticia eliminada con éxito.");
+  } catch (err) {
+    setToastVariant("danger");
+    setToastMessage(err.message);
+  } finally {
+    setShowToast(true); // muestra el toast
+  }
+};
+
+
   if (loading) return <Spinner animation="border" />;
   if (error) return <Alert variant="danger">{error}</Alert>;
 
+  
+
+
   return (
-    <Container>
+    <>
+    <Container className="card-container">
       {news.map((item) => (
-        <Card key={item.id} className="news-card">
+        <Card key={item.id} className="news-card card-body">
           <div className="news-date-label">
             {new Intl.DateTimeFormat("es-AR", {
               day: "numeric",
@@ -59,10 +104,51 @@ const NewsList = ({ refresh }) => {
           <Card.Body>
             <Card.Title className="news-title">{item.title}</Card.Title>
             <Card.Text>{item.description}</Card.Text>
+            {} 
           </Card.Body>
         </Card>
       ))}
+
+
     </Container>
+
+
+  <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+    <Modal.Header closeButton>
+      <Modal.Title>Confirmar eliminación</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      ¿Estás seguro de que querés eliminar la noticia: "<strong>{selectedItem?.title}</strong>"?
+    </Modal.Body>
+    <Modal.Footer>
+      <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+      <Button variant="danger" onClick={() => handleDelete(selectedItem)}>Eliminar</Button>
+    </Modal.Footer>
+  </Modal>
+
+
+<Toast
+  onClose={() => setShowToast(false)}
+  show={showToast}
+  delay={3000}
+  autohide
+  bg={toastVariant}
+  style={{
+    position: 'fixed',
+    bottom: '1rem',
+    right: '1rem',
+    minWidth: '250px',
+  }}
+>
+  <Toast.Header>
+    <strong className="me-auto">Notificación</strong>
+  </Toast.Header>
+  <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+</Toast>
+
+
+
+    </>
   );
 };
 
