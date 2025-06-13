@@ -10,7 +10,7 @@ import {
   ToastContainer,
   Alert,
 } from "react-bootstrap";
-
+import "./Availability.css";
 
 const getDaySpanish = (dayOfWeek) => {
   switch (dayOfWeek) {
@@ -42,8 +42,9 @@ const Availability = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastVariant, setToastVariant] = useState("success");
+  const [updating, setUpdating] = useState(false);
 
-  useEffect(() => {
+  const getAvailabilities = async () => {
     const token = localStorage.getItem("jwtToken");
     fetch("https://localhost:7234/api/Availability/GetAll", {
       headers: { Authorization: `Bearer ${token}` },
@@ -60,6 +61,10 @@ const Availability = () => {
         setShowToast(true);
       })
       .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    getAvailabilities();
   }, []);
 
   const handleEdit = (availabilities) => {
@@ -67,39 +72,80 @@ const Availability = () => {
     setShowModal(true);
   };
 
+  const handleShowModal = () => {
+    setShowModal(true);
+  }
+
+  const handleCreateAvailabilities = async () => {
+    const token = localStorage.getItem("jwtToken");
+  }
+
   const handleSave = async () => {
     const token = localStorage.getItem("jwtToken");
-    console.log(selectedAvailability)
-    try {
-      const res = await fetch(`https://localhost:7234/api/Availability/UpdateAvailability/${selectedAvailability.dayOfWeek}`, {
-        //https://localhost:7234/api/Availability/UpdateAvailability/1
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          startTime: selectedAvailability.startTime,
-          finishTime: selectedAvailability.finishTime,
-          duration: parseInt(selectedAvailability.duration, 10)
-        }),
-      });
+    if (availabilities.length == 0) {
+      try {
+        const res = await fetch(`https://localhost:7234/api/Availability/Create`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            startTime: selectedAvailability.startTime,
+            finishTime: selectedAvailability.finishTime,
+            duration: parseInt(selectedAvailability.duration, 10)
+          }),
+        });
 
-      if (!res.ok) throw new Error("Error al actualizar");
+        if (!res.ok) throw new Error("Error");
 
-      const updated = availabilities.map((u) => (u.id === selectedAvailability.id ? selectedAvailability : u));
-      setAvailabilities(updated);
-      setToastMessage("Usuario actualizado con éxito");
-      setToastVariant("success");
-      setShowToast(true);
-      setShowModal(false);
-    } catch (err) {
-      setToastMessage(err.message);
-      setToastVariant("danger");
-      setShowToast(true);
+        setToastMessage("Disponibilidades creadas con éxito");
+        setToastVariant("success");
+        setShowToast(true);
+        setShowModal(false);
+        setUpdating(true);
+
+        setTimeout(() => {
+          setUpdating(false)
+          getAvailabilities();
+        }, 3000);
+
+      } catch (error) {
+        setToastMessage("Error al crear las disponibilidades");
+        setToastVariant("danger");
+        setShowToast(true);
+      }
+    }
+    else{
+      try {
+        const res = await fetch(`https://localhost:7234/api/Availability/UpdateAvailability/${selectedAvailability.dayOfWeek}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            startTime: selectedAvailability.startTime,
+            finishTime: selectedAvailability.finishTime,
+            duration: parseInt(selectedAvailability.duration, 10)
+          }),
+        });
+
+        if (!res.ok) throw new Error("Error al actualizar");
+
+        const updated = availabilities.map((u) => (u.id === selectedAvailability.id ? selectedAvailability : u));
+        setAvailabilities(updated);
+        setToastMessage("Usuario actualizado con éxito");
+        setToastVariant("success");
+        setShowToast(true);
+        setShowModal(false);
+      } catch (err) {
+        setToastMessage(err.message);
+        setToastVariant("danger");
+        setShowToast(true);
+      }
     }
   };
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,6 +157,12 @@ const Availability = () => {
       <h3 className="usercenter-title">Gestión de Disponibilidades</h3>
 
       {loading && <div className="spinner-center"><Spinner animation="border" /></div>}
+      
+      {updating && (
+        <Alert variant="info" className="text-center">
+          Actualizando la lista de disponibilidades...
+        </Alert>
+      )}
 
       <Table className="user-table" responsive>
         <thead>
@@ -137,28 +189,30 @@ const Availability = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="text-center">No hay usuarios registrados.</td>
+              <td colSpan="6" className="text-center">
+                No hay disponibilidades creadas. <br />
+                <Button variant="success" className="me-2 mt-2" onClick={handleShowModal}>Crear Disponibilidades</Button>
+                </td>
             </tr>
           )}
         </tbody>
       </Table>
 
-      {/* Modales y Toast */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton><Modal.Title>Editar</Modal.Title></Modal.Header>
+        <Modal.Header closeButton><Modal.Title>Ingresar datos</Modal.Title></Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Hora inicio</Form.Label>
-              <Form.Control name="startTime" value={selectedAvailability?.startTime || ""} onChange={handleChange} />
+              <Form.Control className="enter-data-input" name="startTime" placeholder="HH:MM:SS" value={selectedAvailability?.startTime || ""} onChange={handleChange} />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Hora fin</Form.Label>
-              <Form.Control name="finishTime" value={selectedAvailability?.finishTime || ""} onChange={handleChange} />
+              <Form.Control name="finishTime" className="enter-data-input" placeholder="HH:MM:SS" value={selectedAvailability?.finishTime || ""} onChange={handleChange} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Duracion de los turnos</Form.Label>
-              <Form.Control name="duration" value={selectedAvailability?.duration || ""} onChange={handleChange} />
+              <Form.Label>Duración de las reservas</Form.Label>
+              <Form.Control name="duration" className="enter-data-input" placeholder="minutos" value={selectedAvailability?.duration || ""} onChange={handleChange} />
             </Form.Group>
           </Form>
         </Modal.Body>
