@@ -28,3 +28,9 @@
 .btn-primary:hover {
   background-color: var(--court-green-dark);
 }
+
+
+.custom-placeholder::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}

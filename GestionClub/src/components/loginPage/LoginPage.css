@@ -125,3 +125,8 @@ button[type="submit"].btn-dark {
 button[type="submit"].btn-dark:hover {
   background-color: var(--court-green-dark);
 }
+
+.custom-placeholder::placeholder {
+  color: #6c757d !important;
+  opacity: 1;
+}

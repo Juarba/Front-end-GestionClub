@@ -62,6 +62,7 @@ const LoginPage = () => {
               placeholder="Ingresa tu correo" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className='custom-placeholder'
               required 
             />
           </Form.Group>
@@ -73,6 +74,7 @@ const LoginPage = () => {
               placeholder="Contraseña" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className='custom-placeholder'
               required 
             />
             <div className="forgot-password">
