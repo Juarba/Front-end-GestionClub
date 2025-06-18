@@ -1,0 +1,45 @@
+.footer {
+  background-color: var(--gray-900); /* negro profundo desde la paleta */
+  width: 100%;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  color: var(--gray-200); /* texto gris claro */
+}
+
+/* Enlaces del footer */
+.footer ul li {
+  color: var(--gray-300);
+  cursor: pointer;
+  margin-bottom: 5px;
+  transition: color 0.3s;
+}
+
+.footer ul li:hover {
+  color: var(--court-green); /* verde cancha al pasar el mouse */
+}
+
+/* Íconos redes sociales */
+.hover-icon {
+  color: var(--gray-100);
+  transition: color 0.3s ease;
+}
+
+.hover-icon:hover {
+  color: var(--accent-orange); /* naranja acento */
+}
+
+/* Títulos de secciones */
+.footer h5 {
+  color: var(--court-green);
+}
+
+/* Líneas divisorias */
+.footer hr {
+  border-color: var(--gray-700);
+}
+
+/* Parrafos generales */
+.footer p {
+  color: var(--gray-300);
+}

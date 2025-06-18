@@ -1,0 +1,73 @@
+.order-container {
+  background-color: var(--court-green-bg); /* fondo unificado */
+  min-height: 100vh;
+  padding: 5rem;
+  max-width: fit-content;
+  margin: 0 auto;
+}
+
+.order-title {
+  text-align: left;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  color: var(--primary-blue); /* título con azul institucional */
+}
+
+.order-card {
+  border-radius: 20px;
+  background-color: var(--gray-100); /* fondo claro para cards */
+  box-shadow: var(--shadow-md);
+  border: none;
+}
+
+.order-icon {
+  font-size: 3rem;
+  margin-right: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--court-green-dark); /* pelota con verde fuerte */
+}
+
+.order-icon .icon {
+  margin-bottom: 0.25rem;
+}
+
+.order-icon .ball {
+  font-size: 5.5rem;
+}
+
+.card-title {
+  color: var(--gray-800);
+}
+
+.card-text {
+  color: var(--gray-700);
+}
+
+/* Resumen de pago */
+.card .border-bottom {
+  border-color: var(--gray-300) !important;
+}
+
+/* Botones */
+.btn-outline-dark {
+  color: var(--gray-800);
+  border-color: var(--gray-500);
+  background-color: white;
+}
+
+.btn-outline-dark:hover {
+  background-color: var(--gray-200);
+  color: var(--gray-900);
+  border-color: var(--gray-700);
+}
+
+.btn-success {
+  background-color: var(--court-green);
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: var(--court-green-dark);
+}

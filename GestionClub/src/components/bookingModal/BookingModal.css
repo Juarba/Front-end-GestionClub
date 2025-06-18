@@ -1,0 +1,61 @@
+.modal-content {
+  background-color: var(--gray-100);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-lg);
+  color: var(--gray-800);
+}
+
+
+.modal-title {
+  color: var(--primary-blue);
+  font-weight: bold;
+}
+
+
+.modal-body label {
+  color: var(--gray-700);
+  font-weight: 500;
+}
+
+.modal-footer .btn-secondary {
+  background-color: var(--gray-400);
+  border: none;
+  color: white;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: var(--gray-500);
+}
+
+.modal-footer .btn-primary {
+  background-color: var(--court-green);
+  border: none;
+}
+
+.modal-footer .btn-primary:hover {
+  background-color: var(--court-green-dark);
+}
+
+.toast-success {
+  background-color: var(--court-green);
+  color: white;
+}
+
+.toast-danger {
+  background-color: var(--error);
+  color: white;
+}
+
+.toast .toast-header {
+  background-color: var(--gray-800);
+  color: white;
+}
+
+.toast .toast-body {
+  color: white;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}

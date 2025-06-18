@@ -1,0 +1,80 @@
+.step-one-container {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.step-one-form-container {
+  background: var(--gray-700);
+  width: 100%;
+  max-width: 400px;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-lg);
+  color: var(--gray-50);
+}
+
+/* Toggle superior */
+.register-toggle {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid var(--gray-500);
+  background-color: var(--gray-600);
+}
+
+.register-toggle-button {
+  border-radius: 0;
+  width: 50%;
+  color: white;
+  font-weight: 500;
+  background-color: var(--gray-800);
+}
+
+/* Inputs */
+.form-control {
+  background-color: var(--gray-800);
+  border: 1px solid var(--gray-500);
+  color: var(--gray-50);
+}
+
+.form-control::placeholder {
+  color: var(--gray-300);
+  opacity: 1;
+}
+
+.form-control:focus {
+  border-color: var(--primary-blue-light);
+  background-color: var(--gray-800);
+  color: var(--gray-50);
+}
+
+/* Textos auxiliares */
+.form-text {
+  color: var(--error);
+}
+
+.login-prompt {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.login-prompt a {
+  color: var(--primary-blue-light);
+  text-decoration: none;
+}
+
+.login-prompt a:hover {
+  text-decoration: underline;
+}
+
+
+.custom-placeholder::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}

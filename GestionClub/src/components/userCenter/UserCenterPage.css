@@ -1,0 +1,42 @@
+.usercenter-container {
+  background-color: var(--gray-100);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  color: var(--gray-900);
+  max-width: 1000px;
+  margin: 2rem auto;
+}
+
+.usercenter-title {
+  color: var(--primary-blue);
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.user-table {
+  background-color: var(--gray-200);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.user-table thead {
+  background-color: var(--gray-300);
+  color: var(--gray-900);
+}
+
+.user-table th,
+.user-table td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+.user-table tbody tr:hover {
+  background-color: var(--gray-100);
+}
+
+.spinner-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}

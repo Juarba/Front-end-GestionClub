@@ -1,0 +1,67 @@
+.navbar {
+  background-color: var(--gray-900) !important;
+}
+
+/* Links de navegación */
+.nav-link-hover-green {
+  color: var(--gray-100);
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-link-hover-green:hover,
+.nav-link-hover-green:focus,
+.nav-link-hover-green.active {
+  color: var(--court-green) !important;
+}
+
+/* Excepción: link de sesión si está rojo */
+.nav-link-hover-green.text-danger:hover {
+  color: var(--error) !important;
+}
+
+/* Botón de logout */
+.btn-navbar-logout {
+  background-color: var(--error);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-navbar-logout:hover {
+  background-color: #c82333;
+  color: white;
+}
+
+/* Dropdown del usuario */
+.user-dropdown {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 0;
+}
+
+/* Estilo del botón del Dropdown */
+.dropdown-toggle {
+  background-color: transparent !important;
+  border: none;
+  color: var(--gray-100);
+}
+
+.dropdown-menu {
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-300);
+}
+
+.dropdown-item {
+  color: var(--gray-800);
+  font-weight: 500;
+}
+
+.dropdown-item:hover {
+  background-color: var(--gray-200);
+  color: var(--court-green);
+}

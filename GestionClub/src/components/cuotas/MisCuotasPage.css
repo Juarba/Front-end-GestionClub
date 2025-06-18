@@ -1,0 +1,63 @@
+.miscuotas-container {
+  background-color: var(--gray-100);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  color: var(--gray-900);
+  max-width: 900px;
+  margin: 2rem auto;
+}
+
+.miscuotas-title {
+  color: var(--primary-blue);
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+/* Tabla */
+.table-cuotas {
+  background-color: var(--gray-200);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-cuotas thead {
+  background-color: var(--gray-300);
+  color: var(--gray-900);
+}
+
+.table-cuotas thead th {
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--gray-400);
+}
+
+.table-cuotas tbody td {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--gray-300);
+  vertical-align: middle;
+}
+
+.table-cuotas tbody tr:hover {
+  background-color: var(--gray-100);
+}
+
+/* Estado de pago */
+.estado-pagado {
+  color: var(--court-green-dark);
+  font-weight: bold;
+}
+
+.estado-pendiente {
+  color: var(--accent-orange);
+  font-weight: bold;
+}
+
+/* Botón pagar */
+.btn-success {
+  background-color: var(--court-green);
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: var(--court-green-dark);
+}

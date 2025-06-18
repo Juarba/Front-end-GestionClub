@@ -1,8 +1,45 @@
+:root {
+  --primary-blue: #1e3a8a;
+  --primary-blue-light: #3b82f6;
+  --primary-blue-lighter: #dbeafe;
+  
+  --court-green: #16a34a;
+  --court-green-light: #22c55e;
+  --court-green-dark: #15803d;
+  --court-green-bg: #f0fdf4;
+
+  --accent-orange: #ea580c;
+  --accent-orange-light: #fb923c;
+  --accent-orange-bg: #fff7ed;
+
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+
+  --success: #16a34a;
+  --warning: #b48907;
+  --warning-dark : #c49509;
+  --error: #832525;
+  --error-dark: #a51d1d;
+  --info: #0ea5e9;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
 #root {
-  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  background-color: var(--gray-50);
+  color: var(--gray-800); 
 }
 
 .logo {
@@ -12,10 +49,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em var(--primary-blue-light)); 
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em var(--court-green-light)); 
 }
 
 @keyframes logo-spin {
@@ -35,8 +72,12 @@
 
 .card {
   padding: 2em;
+  background-color: var(--gray-100); 
+  border: 1px solid var(--gray-300); 
+  box-shadow: var(--shadow-sm);
+  border-radius: 0.5rem;
 }
 
 .read-the-docs {
-  color: #888;
+  color: var(--gray-500); 
 }

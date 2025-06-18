@@ -1,0 +1,36 @@
+.card {
+  background: var(--gray-100);
+  border-radius: 16px;
+  padding: 2rem 3rem;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  color: var(--gray-800);
+}
+
+.card .icon {
+  width: 80px;
+  margin-bottom: 1rem;
+}
+
+.btn-acceder {
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--court-green);
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--court-green-dark);
+}
+
+
+.custom-placeholder::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
