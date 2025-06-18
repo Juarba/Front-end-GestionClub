@@ -17,7 +17,7 @@ const BookingPage = () => {
       const decoded = jwtDecode(token);
       userRole =
         decoded[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ] ?? null;
     } catch (error) {
       console.error("Error decoding token:", error);
@@ -54,8 +54,8 @@ const BookingPage = () => {
       const ahora = dayjs();
 
       const reservasFuturas = data.filter(
-      (reserva) => dayjs(reserva.startTime).isAfter(ahora)
-    );
+        (reserva) => dayjs(reserva.startTime).isAfter(ahora)
+      );
 
       setAvailability(reservasFuturas);
     } catch (error) {
@@ -102,7 +102,11 @@ const BookingPage = () => {
         }
       );
 
-      if (!response.ok) throw new Error("Error al confirmar");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error al confirmar la reserva");
+      }
+
 
       setToastMessage("Reserva realizada con exito");
       setToastVariant("success");
@@ -111,43 +115,6 @@ const BookingPage = () => {
       setAvailability((prev) =>
         prev.map((item) =>
           item.id === selectedTurno.id ? { ...item, available: false } : item
-        )
-      );
-
-      setShowModal(false);
-      setSelectedTurno(null);
-    } catch (err) {
-      setToastMessage(err.message);
-      setToastVariant("danger");
-      setShowToast(true);
-    }
-  };
-
-  const cancelBooking = async () => {
-    try {
-      const response = await fetch(
-        `https://localhost:7234/api/User/CancelBooking/${selectedTurno.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json(); // ⬅️ Lee el cuerpo del error
-        throw new Error(errorData.error || "Error al cancelar");
-      }
-
-      setToastMessage("Reserva cancelada con exito");
-      setToastVariant("success");
-      setShowToast(true);
-
-      setAvailability((prev) =>
-        prev.map((item) =>
-          item.id === selectedTurno.id ? { ...item, available: true } : item
         )
       );
 
@@ -171,7 +138,7 @@ const BookingPage = () => {
             className="calendar"
             tileClassName={({ date, view }) => {
               const isToday = dayjs(date).isSame(dayjs(), "day");
-              const isWeekend = [0, 6].includes(date.getDay()); // 0: Sunday, 6: Saturday
+              const isWeekend = [0, 6].includes(date.getDay());
               const isOtherMonth = date.getMonth() !== selectedDate.getMonth();
 
               return [
@@ -206,10 +173,9 @@ const BookingPage = () => {
                     <Col key={courtId}>
                       {turno ? (
                         <Card
-                          className={`turno-card ${
-                            !turno.available ? "disabled" : ""
-                          }`}
-                          onClick={() => handleSelectTurno(turno)}
+                          className={`turno-card ${!turno.available ? "disabled" : ""
+                            }`}
+                          onClick={() => turno.available && handleSelectTurno(turno)}
                         >
                           <Card.Body>
                             <Card.Title className="turno-hora">
@@ -250,25 +216,14 @@ const BookingPage = () => {
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isCancelling ? "Cancelar Reserva" : "Confirmar Reserva"}
+            Confirmar Reserva
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {isCancelling ? (
-            <>
-              ¿Deseás <strong>cancelar</strong> la reserva de la cancha{" "}
-              {selectedTurno?.courtId} de{" "}
-              {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
-              {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
-            </>
-          ) : (
-            <>
-              ¿Deseás <strong>reservar</strong> la cancha{" "}
-              {selectedTurno?.courtId} de{" "}
-              {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
-              {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
-            </>
-          )}
+          ¿Deseás <strong>reservar</strong> la cancha{" "}
+          {selectedTurno?.courtId} de{" "}
+          {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
+          {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
@@ -276,9 +231,9 @@ const BookingPage = () => {
           </Button>
           <Button
             variant="primary"
-            onClick={isCancelling ? cancelBooking : confirmBooking}
+            onClick={confirmBooking}
           >
-            {isCancelling ? "Cancelar Reserva" : "Confirmar"}
+            Confirmar
           </Button>
         </Modal.Footer>
       </Modal>
@@ -288,7 +243,7 @@ const BookingPage = () => {
         onClose={() => setShowManagerModal(false)}
       />
 
-      <ToastContainer  position="top-end" className="p-3">
+      <ToastContainer position="top-end" className="p-3">
         <Toast
           show={showToast}
           bg={toastVariant}

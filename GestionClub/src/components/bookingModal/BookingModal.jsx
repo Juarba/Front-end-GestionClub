@@ -42,7 +42,7 @@ const BookingManagerModal = ({ show, onClose, onFetch }) => {
             });
 
             if (!res.ok) {
-                const errorText = await res.text();
+                const errorText = await response.json();
                 throw new Error(errorText || "Error al crear reservas");
             }
 
