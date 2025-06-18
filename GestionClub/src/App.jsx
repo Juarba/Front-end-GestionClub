@@ -74,9 +74,9 @@ function App() {
     {
       path: "/aboutUs",
       element: (
-          <Layout>
-            <AboutUs />
-          </Layout>
+        <Layout>
+          <AboutUs />
+        </Layout>
       ),
     },
     {
@@ -121,15 +121,15 @@ function App() {
       path: "/monthlyFee",
       element: (
         <Layout>
-          <MonthlyFee/>
+          <MonthlyFee />
         </Layout>
       ),
     },
-{
+    {
       path: "/managerDashboard",
       element: (
         <Layout>
-          <ManagerDashboard/>
+          <ManagerDashboard />
         </Layout>
       ),
     },
@@ -206,7 +206,7 @@ function App() {
       element: (
         <PrivateRoute>
           <Layout>
-            <Availability/>
+            <Availability />
           </Layout>
         </PrivateRoute>
       ),

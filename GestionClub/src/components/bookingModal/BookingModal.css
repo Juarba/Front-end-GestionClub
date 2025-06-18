@@ -1,4 +1,3 @@
-
 .modal-content {
   background-color: var(--gray-100);
   border-radius: 0.75rem;
@@ -54,4 +53,9 @@
 
 .toast .toast-body {
   color: white;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }

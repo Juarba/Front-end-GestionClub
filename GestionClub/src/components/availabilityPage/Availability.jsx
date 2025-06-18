@@ -183,7 +183,7 @@ const Availability = () => {
                 <td>{a.finishTime}</td>
                 <td>{a.duration}</td>
                 <td>
-                  <Button variant="warning" className="me-2" onClick={() => handleEdit(a)}>Editar</Button>
+                  <Button variant="outline-secondary" className="me-2" onClick={() => handleEdit(a)}> <i class="bi bi-pencil-square"></i>Editar</Button>
                 </td>
               </tr>
             ))
@@ -217,7 +217,7 @@ const Availability = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
+          <Button variant="outline-secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
           <Button variant="primary" onClick={handleSave}>Guardar</Button>
         </Modal.Footer>
       </Modal>
