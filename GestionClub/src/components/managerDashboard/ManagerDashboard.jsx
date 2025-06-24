@@ -26,6 +26,29 @@ const ManagerDashboard = () => {
   const [paginaActual, setPaginaActual] = useState(1);
   const porPagina = 10;
 
+  const fetchRecaudacion = async (fecha) => {
+    const token = localStorage.getItem("jwtToken");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    const month = fecha.getMonth() + 1;
+    const year = fecha.getFullYear();
+
+    try {
+      const response = await fetch(
+        `https://localhost:7234/api/Payment/GetMonthlyRevenue?month=${month}&year=${year}`,
+        { headers }
+      );
+      const data = await response.json();
+      setRecaudacion(data);
+    } catch (error) {
+      console.error("Error al obtener recaudación:", error);
+      setRecaudacion(0);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,33 +58,28 @@ const ManagerDashboard = () => {
           "Content-Type": "application/json",
         };
 
-        const [
-          resUsuarios,
-          resReservas,
-          resRecaudacion,
-          resActivos,
-          resHorarios,
-        ] = await Promise.all([
-          fetch("https://localhost:7234/api/User/GetAllUsers", { headers }),
-          fetch("https://localhost:7234/api/Booking/GetAllBookings", {
-            headers,
-          }),
-          fetch("https://localhost:7234/api/Payment/GetCurrentMonthRevenue", {
-            headers,
-          }),
-          fetch("https://localhost:7234/api/User/GetActivesUsers", { headers }),
-          fetch(
-            "https://localhost:7234/api/Booking/GetMostFrequentBookingHours",
-            { headers }
-          ),
-        ]);
+        const [resUsuarios, resReservas, resActivos, resHorarios] =
+          await Promise.all([
+            fetch("https://localhost:7234/api/User/GetAllUsers", { headers }),
+            fetch("https://localhost:7234/api/Booking/GetAllBookings", {
+              headers,
+            }),
+            fetch("https://localhost:7234/api/User/GetActivesUsers", {
+              headers,
+            }),
+            fetch(
+              "https://localhost:7234/api/Booking/GetMostFrequentBookingHours",
+              { headers }
+            ),
+          ]);
 
         setUsuarios(await resUsuarios.json());
         const reservasData = await resReservas.json();
         setReservas(reservasData);
-        setRecaudacion(await resRecaudacion.json());
         setActivos(await resActivos.json());
         setHorariosPopulares(await resHorarios.json());
+
+        fetchRecaudacion(fechaSeleccionada);
       } catch (error) {
         console.error("Error cargando datos del dashboard:", error);
       } finally {
@@ -71,6 +89,10 @@ const ManagerDashboard = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    fetchRecaudacion(fechaSeleccionada);
+  }, [fechaSeleccionada]);
 
   const reservasFiltradas = reservas.filter((r) => {
     const fecha = new Date(r.startTime);
@@ -154,8 +176,8 @@ const ManagerDashboard = () => {
     scales: {
       x: {
         ticks: {
-          autoSkip: false, // 👈 fuerza mostrar todas las etiquetas
-          maxRotation: 90, // sin rotación
+          autoSkip: false,
+          maxRotation: 90,
           minRotation: 0,
         },
       },
@@ -262,7 +284,12 @@ const ManagerDashboard = () => {
               <Card className="dashboard-card">
                 <Card.Body>
                   <h5 className="mb-3">Reservas del mes</h5>
-                  <Table className="table-dashboard" hover responsive bsPrefix="custom-table">
+                  <Table
+                    className="table-dashboard"
+                    hover
+                    responsive
+                    bsPrefix="custom-table"
+                  >
                     <thead>
                       <tr>
                         <th>Fecha</th>
