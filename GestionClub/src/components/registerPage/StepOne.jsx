@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./registerCss/StepOne.css";
 
 const StepOne = ({ formData, setFormData, onNext }) => {
   const navigate = useNavigate();
   const [emailExists, setEmailExists] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -34,6 +35,8 @@ const StepOne = ({ formData, setFormData, onNext }) => {
       alert("Las contraseñas no coinciden");
       return;
     }
+
+    setIsLoading(true);
 
     try {
       const response = await fetch(
@@ -71,6 +74,8 @@ const StepOne = ({ formData, setFormData, onNext }) => {
     } catch (error) {
       console.error("Error al registrar usuario:", error);
       alert("Ocurrió un error al intentar registrar al usuario.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -157,8 +162,15 @@ const StepOne = ({ formData, setFormData, onNext }) => {
           />
         </Form.Group>
 
-        <Button variant="primary" className="w-100 mb-3" onClick={handleNext}>
-          Registrarme
+        <Button variant="dark" type="submit" className="w-100 mb-3" onClick={handleNext} disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+              {' '}Cargando...
+            </>
+          ) : (
+            'Registrarme'
+          )}
         </Button>
 
         <div className="login-prompt">
