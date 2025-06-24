@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, Spinner, Table, Button } from "react-bootstrap";
+import { Row, Col, Card, Spinner, Table, Button, Toast, ToastContainer } from "react-bootstrap";
 import { Bar } from "react-chartjs-2";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -24,7 +24,53 @@ const ManagerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
   const [paginaActual, setPaginaActual] = useState(1);
+  const [cantidadReservasMes, setCantidadReservasMes] = useState(0);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const porPagina = 10;
+
+
+  const fetchCantidadReservasMes = async (fecha) => {
+    const token = localStorage.getItem("jwtToken");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
+    const month = fecha.getMonth() + 1;
+    const year = fecha.getFullYear();
+
+    try {
+      const response = await fetch(
+        `https://localhost:7234/api/Booking/GetBookingCountByMonth?month=${month}&year=${year}`,
+        { headers }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        setErrorMessage(error?.detail || "Error desconocido al obtener reservas.");
+        setShowErrorToast(true);
+        setCantidadReservasMes(0);
+        return;
+      }
+
+      const data = await response.json();
+
+      if (typeof data === "number") {
+        setCantidadReservasMes(data);
+      } else {
+        setErrorMessage("La respuesta del servidor no es válida.");
+        setShowErrorToast(true);
+        setCantidadReservasMes(0);
+      }
+    } catch (error) {
+      setErrorMessage("Error al conectar con el servidor.");
+      setShowErrorToast(true);
+      setCantidadReservasMes(0);
+    }
+  };
+
 
   const fetchRecaudacion = async (fecha) => {
     const token = localStorage.getItem("jwtToken");
@@ -80,6 +126,7 @@ const ManagerDashboard = () => {
         setHorariosPopulares(await resHorarios.json());
 
         fetchRecaudacion(fechaSeleccionada);
+        fetchCantidadReservasMes(fechaSeleccionada);
       } catch (error) {
         console.error("Error cargando datos del dashboard:", error);
       } finally {
@@ -91,7 +138,8 @@ const ManagerDashboard = () => {
   }, []);
 
   useEffect(() => {
-    fetchRecaudacion(fechaSeleccionada);
+    fetchRecaudacion(fechaSeleccionada),
+      fetchCantidadReservasMes(fechaSeleccionada)
   }, [fechaSeleccionada]);
 
   const reservasFiltradas = reservas.filter((r) => {
@@ -224,10 +272,10 @@ const ManagerDashboard = () => {
               <Card className="dashboard-card">
                 <Card.Body>
                   <div className="dashboard-card-title">
-                    Usuarios con reservas
+                    Cantidad de reservas
                   </div>
                   <div className="dashboard-card-value">
-                    {usuariosConReserva.length}
+                    {cantidadReservasMes}
                   </div>
                 </Card.Body>
               </Card>
@@ -345,6 +393,16 @@ const ManagerDashboard = () => {
           </Row>
         </Col>
       </Row>
+
+      <ToastContainer position="top-end" className="p-3" style={{ position: "fixed", top: 20, right: 20, zIndex: 1060 }}>
+        <Toast onClose={() => setShowErrorToast(false)} show={showErrorToast} bg="danger" delay={4000} autohide>
+          <Toast.Header>
+            <strong className="me-auto">Error</strong>
+          </Toast.Header>
+          <Toast.Body className="text-white">{errorMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
     </div>
   );
 };
