@@ -118,8 +118,8 @@ const NewsList = ({ refresh }) => {
             <Card.Body>
               <Card.Title className="news-title">{item.title}</Card.Title>
               <Card.Text>{item.description}</Card.Text>
-              {userRole === "CM" ||
-                (userRole === "Admin" && (
+              {(userRole === "CM" ||
+                userRole === "Admin") && (
                   <Button
                     variant="outline-danger"
                     onClick={() => {
@@ -130,7 +130,7 @@ const NewsList = ({ refresh }) => {
                     {" "}
                     <i className="bi bi-trash" /> Eliminar
                   </Button>
-                ))}
+                )}
             </Card.Body>
           </Card>
         ))}
