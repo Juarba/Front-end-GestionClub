@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {Container, Table, Alert, Spinner, Button, Modal, ToastContainer, Toast} from "react-bootstrap";
+import {
+  Container,
+  Table,
+  Alert,
+  Spinner,
+  Button,
+  Modal,
+  ToastContainer,
+  Toast,
+} from "react-bootstrap";
 import "./MisReservas.css";
 import dayjs from "dayjs";
+import emailjs from "@emailjs/browser";
+import "dayjs/locale/es";
 
 const MisReservas = () => {
   const [reservas, setReservas] = useState([]);
@@ -13,6 +24,8 @@ const MisReservas = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastVariant, setToastVariant] = useState("success");
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     const email = localStorage.getItem("userEmail");
@@ -26,7 +39,7 @@ const MisReservas = () => {
         const ahora = dayjs();
         const filtradas = data.filter(
           (reserva) =>
-            reserva.available === false && 
+            reserva.available === false &&
             reserva.userEmail === email &&
             dayjs(reserva.startTime).isAfter(ahora)
         );
@@ -40,6 +53,24 @@ const MisReservas = () => {
     const token = localStorage.getItem("jwtToken");
 
     try {
+      setIsLoading(true);
+      const userResponse = await fetch(
+        "https://localhost:7234/api/User/GetCurrentUser",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!userResponse.ok) {
+        throw new Error("Error al obtener el usuario actual");
+      }
+
+      const currentUser = await userResponse.json();
+      console.log("Usuario actual:", currentUser);
+
       const response = await fetch(
         `https://localhost:7234/api/User/CancelBooking/${reserva.id}`,
         {
@@ -56,6 +87,26 @@ const MisReservas = () => {
         throw new Error(errorData.error || "Error al cancelar");
       }
 
+      const fecha = dayjs(selectedTurno.startTime).locale("es").format("dddd D [de] MMMM ");
+      const horaInicio = dayjs(selectedTurno.startTime).format("HH:mm");
+      const horaFin = dayjs(selectedTurno.finishTime).format("HH:mm");
+      const fechaFormateada =
+        fecha.charAt(0).toUpperCase() +
+        fecha.slice(1) +
+        ` de ${horaInicio} a ${horaFin} hs`;
+
+      await emailjs.send(
+        "service_nc27tnn",
+        "template_yo7oa0z",
+        {
+          userName: currentUser.name,
+          userEmail: currentUser.email,
+          startTime: fechaFormateada,
+          courtId: selectedTurno.courtId,
+        },
+        "TTFwAlFzVFhKF3oL-"
+      );
+
       setToastMessage("Reserva cancelada con exito");
       setToastVariant("success");
       setShowToast(true);
@@ -66,6 +117,8 @@ const MisReservas = () => {
       setToastMessage(err.message);
       setToastVariant("danger");
       setShowToast(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -78,7 +131,11 @@ const MisReservas = () => {
     <Container className="misreservas-container">
       <h3 className="misreservas-title">Mis Reservas</h3>
 
-      {loading && (<div className="spinner-center"><Spinner animation="border" /></div>)}
+      {loading && (
+        <div className="spinner-center">
+          <Spinner animation="border" />
+        </div>
+      )}
       {error && <Alert variant="danger">{error}</Alert>}
 
       <Table className="table-reservas" responsive>
@@ -134,9 +191,9 @@ const MisReservas = () => {
         <Modal.Body>
           ¿Deseás <strong>cancelar</strong> la reserva de la cancha{" "}
           {selectedTurno?.courtId} del día{" "}
-          {dayjs(selectedTurno?.startTime).format("DD/MM/YYYY")}{" "}
-          de {dayjs(selectedTurno?.startTime).format("HH:mm")}{" "}
-          a {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
+          {dayjs(selectedTurno?.startTime).format("DD/MM/YYYY")} de{" "}
+          {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
+          {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
@@ -148,13 +205,28 @@ const MisReservas = () => {
               const reserva = selectedTurno;
               cancelBooking(reserva);
             }}
+            disabled={isLoading}
           >
-            Confirmar Cancelación
+            {isLoading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                Cancelando...
+              </>
+            ) : (
+              "Cancelar"
+            )}
           </Button>
         </Modal.Footer>
       </Modal>
 
-      <ToastContainer  position="top-end" className="p-3">
+      <ToastContainer position="top-end" className="p-3">
         <Toast
           show={showToast}
           bg={toastVariant}

@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Card, Spinner, Alert, Container, Button, Modal, Toast } from "react-bootstrap";
+import {
+  Card,
+  Spinner,
+  Alert,
+  Container,
+  Button,
+  Modal,
+  Toast,
+} from "react-bootstrap";
 import { API_URL } from "../../services/api";
 import { jwtDecode } from "jwt-decode";
 
-import './NewsList.css';
+import "./NewsList.css";
 
 const NewsList = ({ refresh }) => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastVariant, setToastVariant] = useState("success");
-
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const token = localStorage.getItem("jwtToken");
   let userRole = null;
@@ -24,26 +31,24 @@ const NewsList = ({ refresh }) => {
       const decoded = jwtDecode(token);
       userRole =
         decoded[
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ] ?? null;
     } catch (error) {
       console.error("Error decoding token:", error);
     }
   }
 
-
   const fetchNews = async () => {
     try {
       const response = await fetch(`${API_URL}/News/GetAll`, {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       });
 
       if (!response.ok) throw new Error("Error al cargar noticias");
       const data = await response.json();
       setNews(data.sort((a, b) => new Date(b.date) - new Date(a.date)));
-
     } catch (err) {
       setError(err.message);
     } finally {
@@ -51,14 +56,15 @@ const NewsList = ({ refresh }) => {
     }
   };
 
-  console.log(news)
+  console.log(news);
   useEffect(() => {
     fetchNews();
   }, [refresh]);
 
   const handleDelete = async (item) => {
     const token = localStorage.getItem("jwtToken");
-    setShowModal(false); // cierra el modal
+    setIsDeleting(true);
+    setShowModal(false);
 
     try {
       const response = await fetch(`${API_URL}/News/Delete/${item.id}`, {
@@ -78,16 +84,13 @@ const NewsList = ({ refresh }) => {
       setToastVariant("danger");
       setToastMessage(err.message);
     } finally {
-      setShowToast(true); // muestra el toast
+      setIsDeleting(false);
+      setShowToast(true);
     }
   };
 
-
   if (loading) return <Spinner animation="border" />;
   if (error) return <Alert variant="danger">{error}</Alert>;
-
-
-
 
   return (
     <>
@@ -115,30 +118,64 @@ const NewsList = ({ refresh }) => {
             <Card.Body>
               <Card.Title className="news-title">{item.title}</Card.Title>
               <Card.Text>{item.description}</Card.Text>
-              {userRole === "CM" || userRole === "Admin" && (
-                <Button variant="outline-danger" onClick={() => { setSelectedItem(item); setShowModal(true); }}> <i className="bi bi-trash" /> Eliminar</Button>
-              )}
+              {userRole === "CM" ||
+                (userRole === "Admin" && (
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => {
+                      setSelectedItem(item);
+                      setShowModal(true);
+                    }}
+                  >
+                    {" "}
+                    <i className="bi bi-trash" /> Eliminar
+                  </Button>
+                ))}
             </Card.Body>
           </Card>
         ))}
-
-
       </Container>
-
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Confirmar eliminación</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          ¿Estás seguro de que querés eliminar la noticia: "<strong>{selectedItem?.title}</strong>"?
+          ¿Estás seguro de que querés eliminar la noticia: "
+          <strong>{selectedItem?.title}</strong>"?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-secondary" onClick={() => setShowModal(false)}>Cancelar</Button>
-          <Button variant="outline-danger" onClick={() => handleDelete(selectedItem)}> <i className="bi bi-trash" /> Eliminar</Button>
+          <Button
+            variant="outline-secondary"
+            onClick={() => setShowModal(false)}
+          >
+            Cancelar
+          </Button>
+          <Button
+            variant="outline-danger"
+            onClick={() => handleDelete(selectedItem)}
+            disabled={isDeleting}
+          >
+            {isDeleting ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                Eliminando...
+              </>
+            ) : (
+              <>
+                <i className="bi bi-trash" /> Eliminar
+              </>
+            )}
+          </Button>
         </Modal.Footer>
       </Modal>
-
 
       <Toast
         onClose={() => setShowToast(false)}
@@ -147,10 +184,10 @@ const NewsList = ({ refresh }) => {
         autohide
         bg={toastVariant}
         style={{
-          position: 'fixed',
-          bottom: '1rem',
-          right: '1rem',
-          minWidth: '250px',
+          position: "fixed",
+          top: "1rem",
+          right: "1rem",
+          minWidth: "250px",
         }}
       >
         <Toast.Header>
@@ -158,9 +195,6 @@ const NewsList = ({ refresh }) => {
         </Toast.Header>
         <Toast.Body className="text-white">{toastMessage}</Toast.Body>
       </Toast>
-
-
-
     </>
   );
 };

@@ -31,7 +31,7 @@ const Footer = () => {
           <Col md={4}>
             <img src={logo} alt="Logo" className="mb-3" style={{ width: 100 }} />
             <p><FaMapMarkerAlt className="me-2" />Zeballos 1341,<br />S2000 Rosario, Santa Fe</p>
-            <p><FaEnvelope className="me-2" />gestionclub@gmail.com</p>
+            <p><FaEnvelope className="me-2" />gestionclub1@gmail.com</p>
             <p><FaPhone className="me-2" />+54 9 3416 52-1573</p>
           </Col>
 
