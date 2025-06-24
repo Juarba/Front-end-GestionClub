@@ -1,11 +1,23 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Modal, Button, Card, ToastContainer, Toast } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Modal,
+  Button,
+  Card,
+  ToastContainer,
+  Toast,
+  Spinner,
+} from "react-bootstrap";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./BookingPage.css";
 import dayjs from "dayjs";
 import { jwtDecode } from "jwt-decode";
 import BookingManagerModal from "../bookingModal/BookingModal";
+import emailjs from "@emailjs/browser";
+import "dayjs/locale/es";
 
 const BookingPage = () => {
   const token = localStorage.getItem("jwtToken");
@@ -17,7 +29,7 @@ const BookingPage = () => {
       const decoded = jwtDecode(token);
       userRole =
         decoded[
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ] ?? null;
     } catch (error) {
       console.error("Error decoding token:", error);
@@ -33,6 +45,7 @@ const BookingPage = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastVariant, setToastVariant] = useState("success");
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -53,8 +66,8 @@ const BookingPage = () => {
       const data = await response.json();
       const ahora = dayjs();
 
-      const reservasFuturas = data.filter(
-        (reserva) => dayjs(reserva.startTime).isAfter(ahora)
+      const reservasFuturas = data.filter((reserva) =>
+        dayjs(reserva.startTime).isAfter(ahora)
       );
 
       setAvailability(reservasFuturas);
@@ -91,6 +104,24 @@ const BookingPage = () => {
 
   const confirmBooking = async () => {
     try {
+      setIsLoading(true);
+      const userResponse = await fetch(
+        "https://localhost:7234/api/User/GetCurrentUser",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!userResponse.ok) {
+        throw new Error("Error al obtener el usuario actual");
+      }
+
+      const currentUser = await userResponse.json();
+      console.log("Usuario actual:", currentUser);
+
       const response = await fetch(
         `https://localhost:7234/api/User/AssignBooking/${selectedTurno.id}`,
         {
@@ -107,6 +138,27 @@ const BookingPage = () => {
         throw new Error(errorData.message || "Error al confirmar la reserva");
       }
 
+      const fecha = dayjs(selectedTurno.startTime)
+        .locale("es")
+        .format("dddd D [de] MMMM ");
+      const horaInicio = dayjs(selectedTurno.startTime).format("HH:mm");
+      const horaFin = dayjs(selectedTurno.finishTime).format("HH:mm");
+      const fechaFormateada =
+        fecha.charAt(0).toUpperCase() +
+        fecha.slice(1) +
+        ` de ${horaInicio} a ${horaFin} hs`;
+
+      await emailjs.send(
+        "service_nc27tnn",
+        "template_sgpg5rj",
+        {
+          userName: currentUser.name,
+          userEmail: currentUser.email,
+          startTime: fechaFormateada,
+          courtId: selectedTurno.courtId,
+        },
+        "TTFwAlFzVFhKF3oL-"
+      );
 
       setToastMessage("Reserva realizada con exito");
       setToastVariant("success");
@@ -124,6 +176,8 @@ const BookingPage = () => {
       setToastMessage(err.message);
       setToastVariant("danger");
       setShowToast(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -173,9 +227,12 @@ const BookingPage = () => {
                     <Col key={courtId}>
                       {turno ? (
                         <Card
-                          className={`turno-card ${!turno.available ? "disabled" : ""
-                            }`}
-                          onClick={() => turno.available && handleSelectTurno(turno)}
+                          className={`turno-card ${
+                            !turno.available ? "disabled" : ""
+                          }`}
+                          onClick={() =>
+                            turno.available && handleSelectTurno(turno)
+                          }
                         >
                           <Card.Body>
                             <Card.Title className="turno-hora">
@@ -215,14 +272,11 @@ const BookingPage = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>
-            Confirmar Reserva
-          </Modal.Title>
+          <Modal.Title>Confirmar Reserva</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          ¿Deseás <strong>reservar</strong> la cancha{" "}
-          {selectedTurno?.courtId} de{" "}
-          {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
+          ¿Deseás <strong>reservar</strong> la cancha {selectedTurno?.courtId}{" "}
+          de {dayjs(selectedTurno?.startTime).format("HH:mm")} a{" "}
           {dayjs(selectedTurno?.finishTime).format("HH:mm")}?
         </Modal.Body>
         <Modal.Footer>
@@ -232,8 +286,23 @@ const BookingPage = () => {
           <Button
             variant="primary"
             onClick={confirmBooking}
+            disabled={isLoading}
           >
-            Confirmar
+            {isLoading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                Confirmando...
+              </>
+            ) : (
+              "Confirmar"
+            )}
           </Button>
         </Modal.Footer>
       </Modal>

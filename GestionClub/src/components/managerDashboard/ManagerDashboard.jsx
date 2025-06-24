@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, Spinner, Table, Button, Toast, ToastContainer } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Card,
+  Spinner,
+  Table,
+  Button,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import { Bar } from "react-chartjs-2";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -30,7 +39,6 @@ const ManagerDashboard = () => {
 
   const porPagina = 10;
 
-
   const fetchCantidadReservasMes = async (fecha) => {
     const token = localStorage.getItem("jwtToken");
     const headers = {
@@ -49,7 +57,9 @@ const ManagerDashboard = () => {
 
       if (!response.ok) {
         const error = await response.json();
-        setErrorMessage(error?.detail || "Error desconocido al obtener reservas.");
+        setErrorMessage(
+          error?.detail || "Error desconocido al obtener reservas."
+        );
         setShowErrorToast(true);
         setCantidadReservasMes(0);
         return;
@@ -70,7 +80,6 @@ const ManagerDashboard = () => {
       setCantidadReservasMes(0);
     }
   };
-
 
   const fetchRecaudacion = async (fecha) => {
     const token = localStorage.getItem("jwtToken");
@@ -139,7 +148,7 @@ const ManagerDashboard = () => {
 
   useEffect(() => {
     fetchRecaudacion(fechaSeleccionada),
-      fetchCantidadReservasMes(fechaSeleccionada)
+      fetchCantidadReservasMes(fechaSeleccionada);
   }, [fechaSeleccionada]);
 
   const reservasFiltradas = reservas.filter((r) => {
@@ -243,8 +252,13 @@ const ManagerDashboard = () => {
 
   if (loading) {
     return (
-      <div className="dashboard-container">
-        <Spinner animation="border" variant="light" />
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "100vh" }}
+      >
+        <Spinner animation="border" variant="primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </Spinner>
       </div>
     );
   }
@@ -394,15 +408,24 @@ const ManagerDashboard = () => {
         </Col>
       </Row>
 
-      <ToastContainer position="top-end" className="p-3" style={{ position: "fixed", top: 20, right: 20, zIndex: 1060 }}>
-        <Toast onClose={() => setShowErrorToast(false)} show={showErrorToast} bg="danger" delay={4000} autohide>
+      <ToastContainer
+        position="top-end"
+        className="p-3"
+        style={{ position: "fixed", top: 20, right: 20, zIndex: 1060 }}
+      >
+        <Toast
+          onClose={() => setShowErrorToast(false)}
+          show={showErrorToast}
+          bg="danger"
+          delay={4000}
+          autohide
+        >
           <Toast.Header>
             <strong className="me-auto">Error</strong>
           </Toast.Header>
           <Toast.Body className="text-white">{errorMessage}</Toast.Body>
         </Toast>
       </ToastContainer>
-
     </div>
   );
 };
