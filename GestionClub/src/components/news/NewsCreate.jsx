@@ -29,30 +29,31 @@ const NewsCreate = ({ show, onClose, onNewsCreated, showToast }) => {
   };
 
   const onDrop = useCallback(async (acceptedFiles) => {
-    const file = acceptedFiles[0];
-    if (!file) return;
+  const file = acceptedFiles[0];
+  if (!file) return;
 
-    const token = localStorage.getItem("jwtToken");
-    const form = new FormData();
-    form.append("file", file);
+  const token = localStorage.getItem("jwtToken");
+  const form = new FormData();
+  form.append("file", file);
 
-    try {
-      setUploading(true);
-      const response = await fetch(`${API_URL}/News/UploadImage`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: form,
-      });
+  try {
+    setUploading(true);
+    const response = await fetch(`${API_URL}/News/UploadImage`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: form,
+    });
 
-      if (!response.ok) throw new Error("Error al subir imagen");
-      const imageUrl = await response.text();
-      setFormData((prev) => ({ ...prev, imageUrl }));
-    } catch {
-      setErrorMessage("No se pudo subir la imagen.");
-    } finally {
-      setUploading(false);
-    }
-  }, []);
+    if (!response.ok) throw new Error("Error al subir imagen");
+    const data = await response.json();
+    setFormData((prev) => ({ ...prev, imageUrl: data.url }));
+  } catch {
+    setErrorMessage("No se pudo subir la imagen.");
+  } finally {
+    setUploading(false);
+  }
+}, []);
+
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
