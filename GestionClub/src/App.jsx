@@ -82,7 +82,7 @@ function App() {
     {
       path: "/servicePage",
       element: (
-        <PrivateRoute>
+        <PrivateRoute allowedRoles={["Admin"]}>
           <Layout>
             <ServicePage />
           </Layout>
@@ -102,7 +102,7 @@ function App() {
     {
       path: "/userCenter",
       element: (
-        <PrivateRoute>
+        <PrivateRoute allowedRoles={["Admin", "Gerente"]}>
           <Layout>
             <UserCenterPage />
           </Layout>
@@ -204,7 +204,7 @@ function App() {
     {
       path: "/disponibilidades",
       element: (
-        <PrivateRoute>
+        <PrivateRoute allowedRoles={["Admin", "Gerente"]}>
           <Layout>
             <Availability />
           </Layout>
