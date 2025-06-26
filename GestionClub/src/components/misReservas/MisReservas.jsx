@@ -197,7 +197,7 @@ const MisReservas = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Cancelar
+            Cerrar
           </Button>
           <Button
             variant="primary"
