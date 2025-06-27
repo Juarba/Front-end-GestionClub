@@ -182,9 +182,11 @@ const UserDropdown = ({ logout }) => {
                     type="text"
                     className="form-control"
                     value={editData.phoneNumber}
-                    onChange={(e) =>
-                      setEditData({ ...editData, phoneNumber: e.target.value })
-                    }
+                    maxLength={10}
+                    onChange={(e) => {
+                      const onlyNums = e.target.value.replace(/\D/g, "");
+                      setEditData({ ...editData, phoneNumber: onlyNums });
+                    }}
                   />
                 </div>
               </form>
@@ -241,8 +243,8 @@ const UserDropdown = ({ logout }) => {
               {toastVariant === "success"
                 ? "Éxito"
                 : toastVariant === "danger"
-                ? "Error"
-                : "Aviso"}
+                  ? "Error"
+                  : "Aviso"}
             </strong>
           </Toast.Header>
           <Toast.Body className="text-white">{toastMessage}</Toast.Body>

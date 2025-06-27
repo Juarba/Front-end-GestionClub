@@ -79,8 +79,8 @@ const MonthlyFee = () => {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
+        const errorText = await response.json();
+        throw new Error(errorText.detail);
       }
 
       const newFeeId = await response.json();
@@ -112,7 +112,7 @@ const MonthlyFee = () => {
       fetchMonthlyFees();
     } catch (error) {
       console.error("Error creando o asignando cuota:", error);
-      setToastMessage("Error al crear o asignar la cuota.");
+      setToastMessage(error.message);
       setToastVariant("danger");
       setShowToast(true);
     }
@@ -186,7 +186,7 @@ const MonthlyFee = () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(errorText);
+        throw new Error(errorText.detail);
       }
 
       setToastMessage("Cuota eliminada con éxito.");
@@ -196,7 +196,7 @@ const MonthlyFee = () => {
     } catch (error) {
       console.error("Error deleting fee:", error);
       setToastMessage("Error al eliminar la cuota.");
-      setToastVariant("danger");
+      setToastVariant(error.message, "danger");
       setShowToast(true);
     }
   };
@@ -284,7 +284,19 @@ const MonthlyFee = () => {
                 min="1"
                 max="12"
                 value={month}
-                onChange={(e) => setMonth(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+
+                  if (val === "") {
+                    setMonth("");
+                    return;
+                  }
+
+                  const parsed = parseInt(val);
+                  if (!isNaN(parsed) && parsed >= 1 && parsed <= 12) {
+                    setMonth(val);
+                  }
+                }}
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -293,7 +305,20 @@ const MonthlyFee = () => {
                 type="number"
                 min="2025"
                 value={year}
-                onChange={(e) => setYear(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const currentYear = new Date().getFullYear();
+
+                  if (val === "") {
+                    setYear("");
+                    return;
+                  }
+
+                  const parsed = parseInt(val);
+                  if (!isNaN(parsed) && parsed >= currentYear && parsed <= currentYear + 1) {
+                    setYear(val);
+                  }
+                }}
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -303,7 +328,10 @@ const MonthlyFee = () => {
                 min="0"
                 step="0.01"
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  if (val >= 1 || e.target.value === "") setPrice(e.target.value);
+                }}
               />
             </Form.Group>
             <Button
@@ -329,8 +357,8 @@ const MonthlyFee = () => {
               {toastVariant === "success"
                 ? "Éxito"
                 : toastVariant === "danger"
-                ? "Error"
-                : "Aviso"}
+                  ? "Error"
+                  : "Aviso"}
             </strong>
           </Toast.Header>
           <Toast.Body>{toastMessage}</Toast.Body>

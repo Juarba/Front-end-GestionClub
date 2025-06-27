@@ -185,7 +185,10 @@ const UserCenterPage = () => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Teléfono</Form.Label>
-              <Form.Control name="phoneNumber" value={selectedUser?.phoneNumber || ""} onChange={handleChange} />
+              <Form.Control type="text" name="phoneNumber" value={selectedUser?.phoneNumber || ""} maxLength={10} onChange={(e) => {
+                const onlyNums = e.target.value.replace(/\D/g, "");
+                setSelectedUser({ ...selectedUser, phoneNumber: onlyNums });
+              }} />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Rol</Form.Label>

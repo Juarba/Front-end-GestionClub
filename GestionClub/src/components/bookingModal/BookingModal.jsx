@@ -42,8 +42,8 @@ const BookingManagerModal = ({ show, onClose, onFetch }) => {
             });
 
             if (!res.ok) {
-                const errorText = await response.json();
-                throw new Error(errorText || "Error al crear reservas");
+                const errorText = await res.json();
+                throw new Error(errorText.detail || "Error al crear reservas");
             }
 
             showToastMsg("Reservas creadas exitosamente", "success");
@@ -53,7 +53,7 @@ const BookingManagerModal = ({ show, onClose, onFetch }) => {
             onFetch();
         } catch (err) {
             console.error(err);
-            showToastMsg("No se pudieron crear las reservas", "danger");
+            showToastMsg(err.message, "danger");
         } finally {
             setIsLoading(false);
         }

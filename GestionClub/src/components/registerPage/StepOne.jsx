@@ -157,7 +157,11 @@ const StepOne = ({ formData, setFormData, onNext }) => {
             name="phoneNumber"
             placeholder="N° de teléfono"
             value={formData.phoneNumber}
-            onChange={handleChange}
+            maxLength={10}
+            onChange={(e) => {
+              const onlyNums = e.target.value.replace(/\D/g, "");
+              setFormData({ ...formData, phoneNumber: onlyNums });
+            }}
             className='custom-placeholder'
           />
         </Form.Group>
