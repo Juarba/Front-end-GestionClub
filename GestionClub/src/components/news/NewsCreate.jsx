@@ -18,7 +18,7 @@ const NewsCreate = ({ show, onClose, onNewsCreated, showToast }) => {
     title: "",
     description: "",
     imageUrl: "",
-    date: now.toISOString(),
+    date: new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString(),
     dateInput: now.toISOString().split("T")[0],
   });
 
@@ -33,7 +33,7 @@ const NewsCreate = ({ show, onClose, onNewsCreated, showToast }) => {
       title: "",
       description: "",
       imageUrl: "",
-      date: now.toISOString(),
+      date: new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString(),
       dateInput: now.toISOString().split("T")[0],
     });
   };

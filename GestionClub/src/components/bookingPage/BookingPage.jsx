@@ -29,7 +29,7 @@ const BookingPage = () => {
       const decoded = jwtDecode(token);
       userRole =
         decoded[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ] ?? null;
     } catch (error) {
       console.error("Error decoding token:", error);
@@ -138,28 +138,6 @@ const BookingPage = () => {
         throw new Error(errorData.message || "Error al confirmar la reserva");
       }
 
-      const fecha = dayjs(selectedTurno.startTime)
-        .locale("es")
-        .format("dddd D [de] MMMM ");
-      const horaInicio = dayjs(selectedTurno.startTime).format("HH:mm");
-      const horaFin = dayjs(selectedTurno.finishTime).format("HH:mm");
-      const fechaFormateada =
-        fecha.charAt(0).toUpperCase() +
-        fecha.slice(1) +
-        ` de ${horaInicio} a ${horaFin} hs`;
-
-      await emailjs.send(
-        "service_nc27tnn",
-        "template_sgpg5rj",
-        {
-          userName: currentUser.name,
-          userEmail: currentUser.email,
-          startTime: fechaFormateada,
-          courtId: selectedTurno.courtId,
-        },
-        "TTFwAlFzVFhKF3oL-"
-      );
-
       setToastMessage("Reserva realizada con exito");
       setToastVariant("success");
       setShowToast(true);
@@ -172,6 +150,33 @@ const BookingPage = () => {
 
       setShowModal(false);
       setSelectedTurno(null);
+
+      try {
+        const fecha = dayjs(selectedTurno.startTime)
+          .locale("es")
+          .format("dddd D [de] MMMM ");
+        const horaInicio = dayjs(selectedTurno.startTime).format("HH:mm");
+        const horaFin = dayjs(selectedTurno.finishTime).format("HH:mm");
+        const fechaFormateada =
+          fecha.charAt(0).toUpperCase() +
+          fecha.slice(1) +
+          ` de ${horaInicio} a ${horaFin} hs`;
+
+        await emailjs.send(
+          "service_nc27tnn",
+          "template_sgpg5rj",
+          {
+            userName: currentUser.name,
+            userEmail: currentUser.email,
+            startTime: fechaFormateada,
+            courtId: selectedTurno.courtId,
+          },
+          "TTFwAlFzVFhKF3oL-"
+        );
+      } catch (mailError) {
+        console.error("Error al enviar el email:", mailError);
+      }
+
     } catch (err) {
       setToastMessage(err.message);
       setToastVariant("danger");
@@ -227,9 +232,8 @@ const BookingPage = () => {
                     <Col key={courtId}>
                       {turno ? (
                         <Card
-                          className={`turno-card ${
-                            !turno.available ? "disabled" : ""
-                          }`}
+                          className={`turno-card ${!turno.available ? "disabled" : ""
+                            }`}
                           onClick={() =>
                             turno.available && handleSelectTurno(turno)
                           }

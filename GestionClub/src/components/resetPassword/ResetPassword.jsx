@@ -1,4 +1,4 @@
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./ResetPassword.css";
 import { useState } from "react";
@@ -6,8 +6,10 @@ import { useState } from "react";
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
   const handleSendEmail = async () => {
+    setIsSending(true);
     try {
       const response = await fetch("https://localhost:7234/api/RecoverPassword/forgot-password", {
         method: "POST",
@@ -26,6 +28,8 @@ const ResetPassword = () => {
     } catch (error) {
       console.error("Error al enviar el correo:", error);
       setMessage("Ocurrió un error al enviar el correo.");
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -43,8 +47,27 @@ const ResetPassword = () => {
           />
         </Form.Group>
 
-        <Button variant="primary" className="w-100 mb-3" onClick={handleSendEmail}>
-          Enviar enlace de recuperación
+        <Button
+          variant="success"
+          className="w-100 mb-3"
+          onClick={handleSendEmail}
+          disabled={isSending}
+        >
+          {isSending ? (
+            <>
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+                className="me-2"
+              />
+              Enviando...
+            </>
+          ) : (
+            "Enviar enlace de recuperación"
+          )}
         </Button>
 
         {message && (

@@ -64,7 +64,7 @@ const NewsList = ({ refresh }) => {
   const handleDelete = async (item) => {
     const token = localStorage.getItem("jwtToken");
     setIsDeleting(true);
-    setShowModal(false);
+    
 
     try {
       const response = await fetch(`${API_URL}/News/Delete/${item.id}`, {
@@ -80,6 +80,7 @@ const NewsList = ({ refresh }) => {
       setNews((prev) => prev.filter((n) => n.id !== item.id));
       setToastVariant("success");
       setToastMessage("Noticia eliminada con éxito.");
+      setShowModal(false);
     } catch (err) {
       setToastVariant("danger");
       setToastMessage(err.message);
