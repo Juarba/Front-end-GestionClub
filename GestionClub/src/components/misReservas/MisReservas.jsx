@@ -87,32 +87,36 @@ const MisReservas = () => {
         throw new Error(errorData.error || "Error al cancelar");
       }
 
-      const fecha = dayjs(selectedTurno.startTime).locale("es").format("dddd D [de] MMMM ");
-      const horaInicio = dayjs(selectedTurno.startTime).format("HH:mm");
-      const horaFin = dayjs(selectedTurno.finishTime).format("HH:mm");
-      const fechaFormateada =
-        fecha.charAt(0).toUpperCase() +
-        fecha.slice(1) +
-        ` de ${horaInicio} a ${horaFin} hs`;
-
-      await emailjs.send(
-        "service_nc27tnn",
-        "template_yo7oa0z",
-        {
-          userName: currentUser.name,
-          userEmail: currentUser.email,
-          startTime: fechaFormateada,
-          courtId: selectedTurno.courtId,
-        },
-        "TTFwAlFzVFhKF3oL-"
-      );
-
       setToastMessage("Reserva cancelada con exito");
       setToastVariant("success");
       setShowToast(true);
 
       setShowModal(false);
       setReservas((prev) => prev.filter((r) => r.id !== reserva.id));
+
+      try {
+        const fecha = dayjs(selectedTurno.startTime).locale("es").format("dddd D [de] MMMM ");
+        const horaInicio = dayjs(selectedTurno.startTime).format("HH:mm");
+        const horaFin = dayjs(selectedTurno.finishTime).format("HH:mm");
+        const fechaFormateada =
+          fecha.charAt(0).toUpperCase() +
+          fecha.slice(1) +
+          ` de ${horaInicio} a ${horaFin} hs`;
+
+        await emailjs.send(
+          "service_nc27tnn",
+          "template_yo7oa0z",
+          {
+            userName: currentUser.name,
+            userEmail: currentUser.email,
+            startTime: fechaFormateada,
+            courtId: selectedTurno.courtId,
+          },
+          "TTFwAlFzVFhKF3oL-"
+        );
+      } catch (mailError) {
+        console.error("Error al enviar el email de cancelación:", mailError);
+      }
     } catch (err) {
       setToastMessage(err.message);
       setToastVariant("danger");

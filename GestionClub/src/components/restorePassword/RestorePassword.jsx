@@ -37,7 +37,7 @@ const RestorePassword = () => {
   return (
     <div className="reset-pass-container">
       <div className="reset-pass-form-container">
-        <h2 className="mb-4 text-center text-primary">Restablecer Contraseña</h2>
+        <h2 className="mb-4 text-center title-color">Restablecer Contraseña</h2>
 
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">

@@ -59,7 +59,7 @@ const StepOne = ({ formData, setFormData, onNext }) => {
         const errorData = await response.json();
 
         if (
-          errorData.message &&
+          errorData.detail &&
           errorData.message.toLowerCase().includes("ya existe")
         ) {
           setEmailExists(true);
